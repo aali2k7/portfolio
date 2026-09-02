@@ -13,9 +13,9 @@ interface ProjectCardProps {
 export function ProjectCard({ project, isFlagship = false }: ProjectCardProps) {
   if (isFlagship) {
     return (
-      <div className="group relative w-full bg-[var(--bg-secondary)] rounded-3xl md:rounded-4xl p-6 sm:p-8 md:p-12 lg:p-14 border border-[var(--border-subtle)] hover:border-[var(--border-strong)] transition-all duration-300 shadow-sm">
+      <div className="group relative w-full bg-[var(--bg-secondary)] rounded-3xl md:rounded-4xl p-5 sm:p-7 md:p-8 lg:p-9 border border-[var(--border-subtle)] hover:border-[var(--border-strong)] transition-all duration-300 shadow-sm">
         {/* Top Flagship Badge */}
-        <div className="flex flex-wrap items-center justify-between gap-4 pb-6 md:pb-8 border-b border-[var(--border-subtle)]">
+        <div className="flex flex-wrap items-center justify-between gap-4 pb-4 md:pb-5 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-3">
             <span className="font-mono text-sm text-[var(--accent)] font-bold">
               {project.number}
@@ -25,7 +25,7 @@ export function ProjectCard({ project, isFlagship = false }: ProjectCardProps) {
             </span>
           </div>
 
-          <div className="flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[var(--bg-primary)] border border-[var(--border-subtle)]">
+          <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-[var(--bg-primary)] border border-[var(--border-subtle)]">
             <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
             <span className="font-mono text-xs uppercase tracking-wider text-[var(--text-primary)] font-semibold">
               {project.status === "in-development" ? "ACTIVE DEVELOPMENT" : "COMPLETED"}
@@ -34,31 +34,31 @@ export function ProjectCard({ project, isFlagship = false }: ProjectCardProps) {
         </div>
 
         {/* Flagship Body Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center my-8 md:my-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center my-4 md:my-6">
           
           {/* Left Details */}
           <div className="lg:col-span-6 flex flex-col justify-between">
             <div>
-              <h3 className="font-display text-4xl sm:text-5xl md:text-6xl font-extrabold text-[var(--text-primary)] tracking-tight uppercase">
+              <h3 className="font-display text-3xl sm:text-4xl md:text-5xl font-extrabold text-[var(--text-primary)] tracking-tight uppercase">
                 {project.name}
               </h3>
-              <p className="font-heading text-lg sm:text-xl font-medium text-[var(--accent)] mt-3">
+              <p className="font-heading text-base sm:text-lg font-medium text-[var(--accent)] mt-2">
                 {project.tagline}
               </p>
-              <p className="font-body text-sm sm:text-base text-[var(--text-secondary)] mt-4 leading-relaxed">
+              <p className="font-body text-xs sm:text-sm text-[var(--text-secondary)] mt-3 leading-relaxed">
                 {project.description}
               </p>
 
               {/* Highlights */}
               {project.highlights && project.highlights.length > 0 && (
-                <div className="mt-6 space-y-2.5">
-                  <p className="font-mono text-xs uppercase tracking-wider text-[var(--text-muted)] font-semibold">
+                <div className="mt-4 space-y-1.5">
+                  <p className="font-mono text-[11px] uppercase tracking-wider text-[var(--text-muted)] font-semibold">
                     KEY CAPABILITIES:
                   </p>
-                  <ul className="space-y-2">
+                  <ul className="space-y-1.5">
                     {project.highlights.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2.5 text-xs sm:text-sm text-[var(--text-secondary)]">
-                        <Sparkles className="w-3.5 h-3.5 text-[var(--accent)] shrink-0 mt-0.5" />
+                      <li key={idx} className="flex items-start gap-2 text-xs text-[var(--text-secondary)]">
+                        <Sparkles className="w-3 h-3 text-[var(--accent)] shrink-0 mt-0.5" />
                         <span>{item}</span>
                       </li>
                     ))}
@@ -68,12 +68,12 @@ export function ProjectCard({ project, isFlagship = false }: ProjectCardProps) {
             </div>
 
             {/* Technologies */}
-            <div className="mt-8 pt-6 border-t border-[var(--border-subtle)]">
-              <div className="flex flex-wrap gap-2">
+            <div className="mt-5 pt-4 border-t border-[var(--border-subtle)]">
+              <div className="flex flex-wrap gap-1.5">
                 {project.technologies.map((tech) => (
                   <span
                     key={tech}
-                    className="font-mono text-xs px-3 py-1 rounded-full bg-[var(--bg-primary)] text-[var(--text-secondary)] border border-[var(--border-subtle)]"
+                    className="font-mono text-[11px] px-2.5 py-0.5 rounded-full bg-[var(--bg-primary)] text-[var(--text-secondary)] border border-[var(--border-subtle)]"
                   >
                     {tech}
                   </span>
@@ -82,16 +82,16 @@ export function ProjectCard({ project, isFlagship = false }: ProjectCardProps) {
             </div>
 
             {/* Action CTAs */}
-            <div className="mt-8 flex flex-wrap items-center gap-4">
+            <div className="mt-5 flex flex-wrap items-center gap-3">
               {project.liveUrl && (
                 <a
                   href={project.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-6 py-3 rounded-full bg-[var(--text-primary)] text-[var(--bg-primary)] hover:bg-[var(--accent)] font-mono text-xs uppercase tracking-wider font-bold transition-colors cursor-pointer"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-full bg-[var(--text-primary)] text-[var(--bg-primary)] hover:bg-[var(--accent)] font-mono text-xs uppercase tracking-wider font-bold transition-colors cursor-pointer"
                 >
                   <span>EXPLORE PROJECT</span>
-                  <ArrowUpRight className="w-4 h-4" />
+                  <ArrowUpRight className="w-3.5 h-3.5" />
                 </a>
               )}
 
@@ -100,9 +100,9 @@ export function ProjectCard({ project, isFlagship = false }: ProjectCardProps) {
                   href={project.githubUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 px-5 py-3 rounded-full border border-[var(--border-strong)] hover:border-[var(--text-primary)] font-mono text-xs uppercase tracking-wider font-semibold text-[var(--text-primary)] transition-colors cursor-pointer"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-full border border-[var(--border-strong)] hover:border-[var(--text-primary)] font-mono text-xs uppercase tracking-wider font-semibold text-[var(--text-primary)] transition-colors cursor-pointer"
                 >
-                  <GithubIcon className="w-4 h-4" />
+                  <GithubIcon className="w-3.5 h-3.5" />
                   <span>REPOSITORY</span>
                 </a>
               )}
@@ -110,7 +110,7 @@ export function ProjectCard({ project, isFlagship = false }: ProjectCardProps) {
           </div>
 
           {/* Right Image Showcase */}
-          <div className="lg:col-span-6 relative aspect-[16/10] w-full rounded-2xl md:rounded-3xl overflow-hidden bg-[#0A0A0A] shadow-xl border border-[var(--border-subtle)] group-hover:scale-[1.01] transition-transform duration-500">
+          <div className="lg:col-span-6 relative aspect-[16/10] w-full max-h-[36vh] rounded-2xl md:rounded-3xl overflow-hidden bg-[#0A0A0A] shadow-xl border border-[var(--border-subtle)] group-hover:scale-[1.01] transition-transform duration-500">
             <Image
               src={project.image}
               alt={`${project.name} Interface Showcase`}
