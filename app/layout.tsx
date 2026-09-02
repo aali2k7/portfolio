@@ -87,7 +87,7 @@ export default function RootLayout({
         } as React.CSSProperties
       }
     >
-      <body className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] font-body antialiased overflow-x-hidden">
+      <body className="min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] font-body antialiased overflow-x-clip">
         {children}
       </body>
     </html>

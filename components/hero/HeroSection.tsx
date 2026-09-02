@@ -39,20 +39,20 @@ export function HeroSection() {
   // CHOREOGRAPHY TIMELINE CALCULATIONS (0.0 -> 1.0)
   // -------------------------------------------------------------
 
-  // Phase 1 -> 2: Text Fade Out (0.12 -> 0.32)
+  // Phase 1 -> 2: Text Fade Out (0.10 -> 0.32)
   const textFadeProgress = Math.max(0, Math.min(1, (scrollProgress - 0.10) / 0.22));
   const textOpacity = Math.max(0, 1 - textFadeProgress);
   const textTranslateY = -textFadeProgress * 36;
   const textBlur = textFadeProgress * 3;
 
-  // Phase 2 -> 3: Portrait Shift to Center & Fade (0.15 -> 0.55)
+  // Phase 2 -> 3: Portrait Shift to Center & Fade (0.12 -> 0.55)
   const portraitCenterProgress = Math.max(0, Math.min(1, (scrollProgress - 0.12) / 0.28));
   const portraitFadeProgress = Math.max(0, Math.min(1, (scrollProgress - 0.32) / 0.22));
   
-  // Portrait transform values
-  const portraitXOffset = (1 - portraitCenterProgress) * 22; // moves from right +22vw towards center 0
-  const portraitScale = 1 - portraitFadeProgress * 0.3;
-  const portraitOpacity = Math.max(0, 1 - portraitFadeProgress * 1.2);
+  // Portrait shifts from its natural right column (0) INWARD toward center (-16vw on desktop)
+  const portraitXOffset = -portraitCenterProgress * 16;
+  const portraitScale = 1 - portraitFadeProgress * 0.25;
+  const portraitOpacity = Math.max(0, 1 - portraitFadeProgress * 1.25);
   const portraitGrayscale = Math.min(100, portraitFadeProgress * 120);
 
   // Phase 3 -> 4: Signature Emergence & Massive Takeover (0.35 -> 0.75)
@@ -79,7 +79,7 @@ export function HeroSection() {
     <div
       id="hero"
       ref={trackRef}
-      className="relative w-full h-[380vh] bg-[var(--bg-primary)] select-none"
+      className="relative w-full h-[380vh] bg-[var(--bg-primary)] select-none overflow-x-clip"
     >
       {/* Pinned Sticky Viewport (100vh / 100dvh) */}
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-[var(--bg-primary)]">
@@ -184,14 +184,14 @@ export function HeroSection() {
         {/* Fades smoothly out as Signature Takeover and Screen Split take over       */}
         {/* ========================================================================= */}
         <div
-          className="absolute inset-0 z-30 w-full h-full flex flex-col justify-between pt-24 md:pt-28 pb-8 px-4 sm:px-6 md:px-12 lg:px-16 max-w-[1500px] mx-auto pointer-events-none"
+          className="absolute inset-0 z-30 w-full h-full flex flex-col justify-between pt-20 md:pt-24 pb-6 px-4 sm:px-6 md:px-10 lg:px-12 xl:px-16 max-w-[1600px] mx-auto pointer-events-none"
           style={{
             opacity: Math.max(0, 1 - sigDominanceProgress * 1.5),
           }}
         >
           {/* Top Eyebrow Bar (Fades with text) */}
           <div
-            className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-subtle)] pb-4 transition-transform duration-75"
+            className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-subtle)] pb-3.5 transition-transform duration-75"
             style={{
               opacity: textOpacity,
               transform: `translate3d(0, ${textTranslateY * 0.5}px, 0)`,
@@ -211,21 +211,21 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* MAIN TWO-COLUMN HERO STAGING */}
-          <div className="relative my-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center min-h-[62vh] md:min-h-[70vh]">
+          {/* MAIN TWO-COLUMN HERO STAGING: 60-65% Left Typography, 35-40% Right Portrait */}
+          <div className="relative my-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-8 xl:gap-12 items-center min-h-[64vh] md:min-h-[72vh]">
             
             {/* ------------------------------------------------------------- */}
-            {/* LEFT COLUMN: Overlapping Massive Editorial Typography (z-20)  */}
+            {/* LEFT COLUMN: Typography and Portfolio Content (~62%)          */}
             {/* ------------------------------------------------------------- */}
             <div
-              className="lg:col-span-7 xl:col-span-8 z-20 flex flex-col justify-center pointer-events-auto"
+              className="lg:col-span-7 xl:col-span-7 z-20 flex flex-col justify-center pointer-events-auto"
               style={{
                 opacity: textOpacity,
                 transform: `translate3d(0, ${textTranslateY}px, 0)`,
                 filter: `blur(${textBlur}px)`,
               }}
             >
-              {/* Primary Name Headline (Overlaps toward the right photograph) */}
+              {/* Primary Name Headline (Extends visually toward portrait) */}
               <h1 className="font-display text-hero-title text-[var(--text-primary)] tracking-tighter uppercase font-extrabold select-none leading-[0.86]">
                 AALI
                 <span className="block text-[var(--text-primary)] relative">
@@ -234,7 +234,7 @@ export function HeroSection() {
               </h1>
 
               {/* Problem-First Positioning Tagline */}
-              <div className="mt-6 md:mt-8 max-w-2xl">
+              <div className="mt-5 md:mt-7 max-w-xl xl:max-w-2xl">
                 <p className="font-heading text-lg sm:text-2xl md:text-3xl text-[var(--text-primary)] font-semibold leading-tight tracking-tight">
                   I DON&apos;T START WITH CODE.
                   <span className="block text-[var(--accent)]">I START WITH THE PROBLEM.</span>
@@ -242,7 +242,7 @@ export function HeroSection() {
               </div>
 
               {/* Supporting Metadata & Pillars */}
-              <div className="mt-6 md:mt-8 pt-6 border-t border-[var(--border-subtle)] flex flex-wrap gap-x-6 gap-y-2 font-mono text-[11px] sm:text-xs text-[var(--text-secondary)] font-medium">
+              <div className="mt-5 md:mt-7 pt-5 border-t border-[var(--border-subtle)] flex flex-wrap gap-x-6 gap-y-2 font-mono text-[11px] sm:text-xs text-[var(--text-secondary)] font-medium">
                 <div className="flex items-center gap-1.5">
                   <Sparkles className="w-3 h-3 text-[var(--accent)]" />
                   <span>FULL-STACK ARCHITECTURE</span>
@@ -259,32 +259,33 @@ export function HeroSection() {
             </div>
 
             {/* ------------------------------------------------------------- */}
-            {/* RIGHT COLUMN: Dominant Portrait Staging (z-10)                */}
+            {/* RIGHT COLUMN: Fully In-Viewport Portrait Staging (~38%)       */}
             {/* ------------------------------------------------------------- */}
             <div
-              className="lg:col-span-5 xl:col-span-4 z-10 flex justify-center lg:justify-end will-change-transform pointer-events-none"
+              className="lg:col-span-5 xl:col-span-5 z-10 flex justify-center lg:justify-end items-center will-change-transform pointer-events-none pr-0 lg:pr-2 xl:pr-4"
               style={{
                 transform: `translate3d(${portraitXOffset}vw, 0, 0) scale(${portraitScale})`,
                 opacity: portraitOpacity,
                 filter: `grayscale(${portraitGrayscale}%)`,
               }}
             >
-              <div className="relative w-full max-w-sm sm:max-w-md lg:max-w-none aspect-[3/4] sm:aspect-[4/5] lg:aspect-[3/4] rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl border border-[rgba(10,10,10,0.08)] bg-[#EFEFEA]">
-                {/* Portrait Photo */}
+              {/* Portrait Card (35-40% viewport width, perfectly contained with 4-6vw right margin) */}
+              <div className="relative w-full max-w-[320px] sm:max-w-[380px] md:max-w-[400px] lg:max-w-[420px] xl:max-w-[460px] aspect-[3/4] sm:aspect-[4/5] lg:aspect-[3/4] rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl border border-[rgba(10,10,10,0.1)] bg-[#EFEFEA]">
+                {/* Aali's Portrait Photo */}
                 <Image
                   src="/images/portrait.jpg"
                   alt={`${siteConfig.name} — Professional Portrait`}
                   fill
                   priority
-                  sizes="(max-width: 768px) 90vw, (max-width: 1200px) 48vw, 550px"
-                  className="object-cover object-top"
+                  sizes="(max-width: 768px) 85vw, (max-width: 1200px) 38vw, 460px"
+                  className="object-cover object-[center_12%]"
                 />
 
-                {/* Subtle internal vignette */}
-                <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,10,0.45)] via-transparent to-transparent" />
+                {/* Subtle bottom vignette */}
+                <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,10,0.45)] via-transparent to-transparent pointer-events-none" />
 
                 {/* Bottom tag on portrait */}
-                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-[#F4F4F0] font-mono text-[11px] tracking-widest uppercase">
+                <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-[#F4F4F0] font-mono text-[11px] tracking-widest uppercase pointer-events-none">
                   <span className="font-semibold">{siteConfig.name}</span>
                   <span className="text-[var(--accent)] font-bold">2026</span>
                 </div>
@@ -295,7 +296,7 @@ export function HeroSection() {
 
           {/* Bottom Scroll Cue */}
           <div
-            className="flex items-center justify-between pt-4 border-t border-[var(--border-subtle)] font-mono text-[11px] uppercase tracking-widest text-[var(--text-muted)]"
+            className="flex items-center justify-between pt-3.5 border-t border-[var(--border-subtle)] font-mono text-[11px] uppercase tracking-widest text-[var(--text-muted)]"
             style={{
               opacity: textOpacity,
               transform: `translate3d(0, ${textTranslateY * 0.5}px, 0)`,
