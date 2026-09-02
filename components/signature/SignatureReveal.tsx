@@ -5,14 +5,81 @@ import { siteConfig } from "@/data/siteConfig";
 
 interface SignatureRevealProps {
   progress?: number; // 0 (hidden) to 1 (fully drawn & focused)
+  isMassive?: boolean;
+  className?: string;
 }
 
-export function SignatureReveal({ progress = 1 }: SignatureRevealProps) {
+export function SignatureReveal({
+  progress = 1,
+  isMassive = false,
+  className = "",
+}: SignatureRevealProps) {
   // Clamp progress between 0 and 1
   const p = Math.max(0, Math.min(1, progress));
 
+  if (isMassive) {
+    return (
+      <div className={`relative w-full max-w-5xl mx-auto flex items-center justify-center ${className}`}>
+        <svg
+          viewBox="0 0 600 240"
+          fill="none"
+          stroke="currentColor"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className="w-full h-auto text-[var(--text-primary)] overflow-visible drop-shadow-sm"
+        >
+          {/* Main Name Signature Stroke 1 */}
+          <motion.path
+            d="M 60 180 C 75 140, 110 50, 135 60 C 150 65, 125 170, 115 190 C 130 170, 180 130, 200 135 C 215 138, 195 185, 185 190 C 195 175, 230 145, 250 145 C 265 145, 250 185, 245 190"
+            strokeWidth="6.5"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: p >= 0.2 ? 1 : p * 5 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          />
+
+          {/* Cross stroke */}
+          <motion.path
+            d="M 85 130 Q 155 125 210 120"
+            strokeWidth="5"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: p >= 0.35 ? 1 : 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          />
+
+          {/* Rahman Stroke 2 */}
+          <motion.path
+            d="M 280 185 C 290 140, 310 90, 330 95 C 345 100, 325 180, 320 190 C 335 160, 380 120, 420 125 C 450 130, 430 190, 410 195 C 440 160, 510 110, 560 100"
+            strokeWidth="6.5"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: p >= 0.5 ? 1 : 0 }}
+            transition={{ duration: 1.0, ease: "easeOut" }}
+          />
+
+          {/* Secondary flourish */}
+          <motion.path
+            d="M 380 145 Q 460 140 540 135"
+            strokeWidth="4.5"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: p >= 0.65 ? 1 : 0 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          />
+
+          {/* Accent Underline Flourish */}
+          <motion.path
+            d="M 80 215 C 200 210, 420 220, 570 195 C 520 225, 340 235, 120 230"
+            stroke="var(--accent)"
+            strokeWidth="5"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: p >= 0.75 ? 1 : 0 }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+          />
+        </svg>
+      </div>
+    );
+  }
+
   return (
-    <div className="relative w-full max-w-2xl mx-auto flex flex-col items-center justify-center p-4">
+    <div className={`relative w-full max-w-2xl mx-auto flex flex-col items-center justify-center p-4 ${className}`}>
       {/* Editorial Declaration Header */}
       <div className="flex items-center gap-2 mb-3">
         <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
