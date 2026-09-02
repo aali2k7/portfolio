@@ -1,4 +1,4 @@
-# AALI OS
+# AALI 
 
 An interactive operating system-inspired portfolio built with Next.js, TypeScript, and modern web technologies.
 
