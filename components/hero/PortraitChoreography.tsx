@@ -34,14 +34,16 @@ export function PortraitChoreography() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Compute interpolated visual properties based on 3 stages:
-  // Stage 1: 0.0 -> 0.35 (Intro / Dominant)
-  // Stage 2: 0.35 -> 0.70 (Immersion / Scaling / Desaturating)
-  // Stage 3: 0.70 -> 1.0 (Transformation / Signature Reveal Takes Over)
+  // Multi-state "Turning to Camera" interpolation:
+  // Progress 0.0 -> 0.25: Side profile visible
+  // Progress 0.25 -> 0.45: Smooth cross-dissolve to Front-facing portrait (Turning to camera effect)
+  // Progress 0.45 -> 0.75: Immersion, scaling, desaturating, moving deeper into background
+  // Progress 0.75 -> 1.0: Signature takeover
 
-  const portraitScale = Math.max(0.7, 1 - scrollProgress * 0.35);
-  const portraitTranslateY = scrollProgress * 60; // moves slightly down
-  const portraitOpacity = Math.max(0.15, 1 - scrollProgress * 0.9);
+  const frontPortraitOpacity = Math.min(1, Math.max(0, (scrollProgress - 0.15) * 4));
+  const portraitScale = Math.max(0.68, 1 - scrollProgress * 0.35);
+  const portraitTranslateY = scrollProgress * 60;
+  const portraitOverallOpacity = Math.max(0.12, 1 - scrollProgress * 0.9);
   const portraitGrayscale = Math.min(100, scrollProgress * 120);
 
   // Signature progress kicks in after 0.45
@@ -55,29 +57,47 @@ export function PortraitChoreography() {
       {/* Sticky Choreography Viewport */}
       <div className="sticky top-0 h-screen w-full flex flex-col items-center justify-center overflow-hidden px-4 md:px-8">
         
-        {/* Stage 1 & 2: Centerpiece Portrait Composition */}
+        {/* Centerpiece Multi-State Portrait Frame */}
         <div
           className="relative z-10 w-full max-w-sm sm:max-w-md md:max-w-lg aspect-[3/4] rounded-2xl md:rounded-3xl overflow-hidden shadow-2xl transition-transform duration-75 ease-out will-change-transform border border-[rgba(10,10,10,0.08)] bg-[#EFEFEA]"
           style={{
             transform: `scale(${portraitScale}) translateY(${portraitTranslateY}px)`,
-            opacity: portraitOpacity,
+            opacity: portraitOverallOpacity,
             filter: `grayscale(${portraitGrayscale}%)`,
           }}
         >
-          <Image
-            src="/images/portrait.jpg"
-            alt={`${siteConfig.name} — Professional Portrait`}
-            fill
-            priority
-            sizes="(max-width: 768px) 90vw, (max-width: 1200px) 50vw, 450px"
-            className="object-cover object-top"
-          />
+          {/* State A: Side Profile Portrait */}
+          <div className="absolute inset-0">
+            <Image
+              src="/images/portrait-side.jpg"
+              alt={`${siteConfig.name} — Profile Portrait`}
+              fill
+              priority
+              sizes="(max-width: 768px) 90vw, (max-width: 1200px) 50vw, 450px"
+              className="object-cover object-center"
+            />
+          </div>
+
+          {/* State B: Front-Facing Portrait (Cross-dissolve as user scrolls) */}
+          <div
+            className="absolute inset-0 transition-opacity duration-200"
+            style={{ opacity: frontPortraitOpacity }}
+          >
+            <Image
+              src="/images/portrait.jpg"
+              alt={`${siteConfig.name} — Front Portrait`}
+              fill
+              priority
+              sizes="(max-width: 768px) 90vw, (max-width: 1200px) 50vw, 450px"
+              className="object-cover object-top"
+            />
+          </div>
 
           {/* Vignette Overlay inside portrait frame */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,10,0.5)] via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[rgba(10,10,10,0.5)] via-transparent to-transparent pointer-events-none" />
 
           {/* Bottom tag on portrait */}
-          <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-[#F4F4F0] font-mono text-[11px] tracking-widest uppercase">
+          <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between text-[#F4F4F0] font-mono text-[11px] tracking-widest uppercase pointer-events-none">
             <span>{siteConfig.name}</span>
             <span className="text-[var(--accent)] font-bold">2026</span>
           </div>

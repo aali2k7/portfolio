@@ -20,7 +20,7 @@ export const researchPublications: ResearchPublication[] = [
       "Cloud-Native Security",
     ],
     status: "Published",
-    doiUrl: "#", // Sourced or updated when final publication DOI link is supplied
-    paperUrl: "#",
+    doiUrl: "https://doi.org/10.59256/indjcst.20260502106",
+    paperUrl: "https://doi.org/10.59256/indjcst.20260502106",
   },
 ];

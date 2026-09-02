@@ -30,7 +30,7 @@ export function ResearchSection() {
       {paper && (
         <div className="relative bg-[var(--bg-secondary)] rounded-3xl md:rounded-4xl p-6 sm:p-8 md:p-12 lg:p-14 border border-[var(--border-subtle)] shadow-sm">
           
-          {/* Top Journal Badge */}
+          {/* Top Journal Badge & DOI Link */}
           <div className="flex flex-wrap items-center justify-between gap-4 pb-6 md:pb-8 border-b border-[var(--border-subtle)]">
             <div className="flex items-center gap-3">
               <BookOpen className="w-4 h-4 text-[var(--accent)]" />
@@ -39,10 +39,22 @@ export function ResearchSection() {
               </span>
             </div>
 
-            <div className="flex items-center gap-3">
+            <div className="flex flex-wrap items-center gap-3">
               <span className="font-mono text-xs px-3 py-1 rounded-full bg-[var(--bg-primary)] border border-[var(--border-subtle)] font-bold text-[var(--accent)]">
                 PUBLISHED — {paper.year}
               </span>
+
+              {paper.doiUrl && (
+                <a
+                  href={paper.doiUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 px-4 py-1 rounded-full bg-[var(--text-primary)] text-[var(--bg-primary)] hover:bg-[var(--accent)] font-mono text-xs font-semibold transition-colors cursor-pointer"
+                >
+                  <span>DOI: 10.59256/indjcst...</span>
+                  <BookOpen className="w-3.5 h-3.5" />
+                </a>
+              )}
             </div>
           </div>
 
