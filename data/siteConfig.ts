@@ -32,6 +32,6 @@ export const siteConfig: SiteConfig = {
     linkedin: "https://www.linkedin.com/in/aalirahman",
     instagram: "https://www.instagram.com/aali_ciao/",
   },
-  // Configurable global accent color: Electric Vermilion by default
-  accentColor: "#FF3E00",
+  // Primary accent: Vibrant neon lime green from signature reference
+  accentColor: "#5AFF15",
 };
