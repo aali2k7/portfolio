@@ -106,11 +106,10 @@ export function SignatureReveal({
       >
         <svg
           viewBox="-40 -40 1104 656"
-          className={`overflow-visible ${
-            isMassive
+          className={`overflow-visible ${isMassive
               ? "w-[78vw] sm:w-[68vw] md:w-[54vw] lg:w-[46vw] max-w-[880px]"
               : "w-[52vw] sm:w-[40vw] md:w-[30vw] max-w-[440px]"
-          } h-auto`}
+            } h-auto`}
         >
           <defs>
             {/* Scroll-Driven Sequential Stroke Mask with Generous Bounds */}

@@ -38,7 +38,7 @@ export function ProjectCard({ project, isFlagship = false }: ProjectCardProps) {
 
         {/* Flagship Body Grid */}
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-center my-4 md:my-6">
-          
+
           {/* Left Details */}
           <div className="lg:col-span-6 flex flex-col justify-between">
             <div>

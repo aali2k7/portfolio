@@ -108,11 +108,10 @@ export function FullscreenMenu({
                         {link.number}
                       </span>
                       <span
-                        className={`font-display text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight transition-all duration-300 ${
-                          isActive
+                        className={`font-display text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight transition-all duration-300 ${isActive
                             ? "text-[var(--accent)] translate-x-3"
                             : "text-[#E5E5EA] group-hover:text-[var(--accent)] group-hover:translate-x-3"
-                        }`}
+                          }`}
                       >
                         {link.label}
                       </span>

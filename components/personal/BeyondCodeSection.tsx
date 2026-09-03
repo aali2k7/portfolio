@@ -86,11 +86,10 @@ export function BeyondCodeSection() {
           {achievements.map((ach) => (
             <div
               key={ach.id}
-              className={`p-6 rounded-2xl bg-[var(--bg-primary)] border transition-all ${
-                ach.isPlaceholder
+              className={`p-6 rounded-2xl bg-[var(--bg-primary)] border transition-all ${ach.isPlaceholder
                   ? "border-dashed border-[var(--border-strong)] opacity-80"
                   : "border-[var(--border-subtle)]"
-              }`}
+                }`}
             >
               <div className="flex items-center justify-between font-mono text-xs text-[var(--text-muted)] mb-2">
                 <span>{ach.year}</span>

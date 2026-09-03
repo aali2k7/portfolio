@@ -29,7 +29,7 @@ export function ResearchSection() {
       {/* Editorial Research Showcase */}
       {paper && (
         <div className="relative bg-[var(--bg-secondary)] rounded-3xl md:rounded-4xl p-6 sm:p-8 md:p-12 lg:p-14 border border-[var(--border-subtle)] shadow-sm">
-          
+
           {/* Top Journal Badge & DOI Link */}
           <div className="flex flex-wrap items-center justify-between gap-4 pb-6 md:pb-8 border-b border-[var(--border-subtle)]">
             <div className="flex items-center gap-3">

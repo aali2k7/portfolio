@@ -2,14 +2,25 @@
 
 import { useRef, useEffect, useState } from "react";
 import Image from "next/image";
+import { motion, AnimatePresence } from "motion/react";
 import { siteConfig } from "@/data/siteConfig";
 import { HeroBackgroundVideo } from "./HeroBackgroundVideo";
 import { SignatureReveal } from "@/components/signature/SignatureReveal";
-import { ArrowDown, Sparkles } from "lucide-react";
+import { ArrowDown, Sparkles, ArrowUpRight, X } from "lucide-react";
+
+type ModuleType = "who" | "build" | "journey" | "currently" | null;
+
+const modules = [
+  { id: "who" as const, num: "01", label: "WHO I AM", tag: "IDENTITY // CURIOSITY" },
+  { id: "build" as const, num: "02", label: "WHAT I BUILD", tag: "CRAFT // SYSTEMS" },
+  { id: "journey" as const, num: "03", label: "MY JOURNEY", tag: "TIMELINE // EVOLUTION" },
+  { id: "currently" as const, num: "04", label: "CURRENTLY", tag: "FOCUS // EDUCATION" },
+];
 
 export function HeroSection() {
   const trackRef = useRef<HTMLDivElement | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [activeModule, setActiveModule] = useState<ModuleType>(null);
 
   // Scroll Progress Tracking inside pinned container
   useEffect(() => {
@@ -35,6 +46,18 @@ export function HeroSection() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Keyboard shortcut: Escape to close active overlay
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setActiveModule(null);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   // ---------------------------------------------------------------------------
   // TIMELINE CALCULATIONS (0.0 -> 1.0)
   // ---------------------------------------------------------------------------
@@ -51,19 +74,11 @@ export function HeroSection() {
   const heroBlur = heroRecedeProgress * 6; // 0 -> 6px
   const scrimOpacity = Math.min(0.94, heroRecedeProgress * 1.15); // 0 -> 0.94
 
-  // STAGE 5: Chapter 01 — The Human Behind the Machine (Staggered Interpolation)
-  // 0.62 -> 0.96
+  // STAGE 5: Chapter 01 / About — Minimalist Interactive Interface (0.62 -> 0.96)
   const chapterProgress = Math.max(0, Math.min(1, (scrollProgress - 0.62) / 0.32));
-  
-  // Staggered reveals for distinct storytelling layers
-  const headlineOpacity = Math.min(1, Math.max(0, (chapterProgress - 0.05) / 0.35));
-  const headlineTranslateY = (1 - Math.pow(Math.min(1, Math.max(0, (chapterProgress - 0.05) / 0.35)), 0.75)) * 25;
 
-  const narrativeOpacity = Math.min(1, Math.max(0, (chapterProgress - 0.18) / 0.40));
-  const narrativeTranslateY = (1 - Math.pow(Math.min(1, Math.max(0, (chapterProgress - 0.18) / 0.40)), 0.75)) * 20;
-
-  const metadataOpacity = Math.min(1, Math.max(0, (chapterProgress - 0.28) / 0.45));
-  const metadataTranslateY = (1 - Math.pow(Math.min(1, Math.max(0, (chapterProgress - 0.28) / 0.45)), 0.75)) * 20;
+  const contentOpacity = Math.min(1, Math.max(0, (chapterProgress - 0.08) / 0.38));
+  const contentTranslateY = (1 - Math.pow(Math.min(1, Math.max(0, (chapterProgress - 0.08) / 0.38)), 0.75)) * 25;
 
   // Top Eyebrow Bar Fade (0.50 -> 0.70)
   const topEyebrowOpacity = Math.max(0, 1 - (scrollProgress - 0.50) / 0.20);
@@ -80,7 +95,7 @@ export function HeroSection() {
     >
       {/* Sticky Viewport Container */}
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-[var(--bg-primary)] flex flex-col justify-between">
-        
+
         {/* ========================================================================= */}
         {/* LAYER 1: DEEP NAVY / PURPLE ATMOSPHERE & GENERATIVE ORGANIC CONTOUR       */}
         {/* ========================================================================= */}
@@ -174,7 +189,7 @@ export function HeroSection() {
           {/* Portrait Container with feathered base & sides */}
           <div className="relative w-[340px] sm:w-[440px] md:w-[540px] lg:w-[620px] h-[68vh] sm:h-[76vh] md:h-[84vh] max-h-[920px] flex items-end justify-center">
             <Image
-              src="/images/portrait-cinematic.png"
+              src="/images/portrait-isolated.png"
               alt={siteConfig.name}
               fill
               priority
@@ -208,166 +223,333 @@ export function HeroSection() {
         />
 
         {/* ========================================================================= */}
-        {/* LAYER 5: CHAPTER 01 — THE HUMAN BEHIND THE MACHINE                        */}
-        {/* Spacious, Editorial, Personal Narrative with Zero Boxed UI Clutter        */}
+        {/* LAYER 5: CHAPTER 01 / ABOUT — MINIMALIST INTERACTIVE IDENTITY INTERFACE   */}
+        {/* Minimal Initial Screen + 4 Interactive Information Modules                 */}
         {/* ========================================================================= */}
         <div
           className="absolute inset-0 z-30 flex flex-col justify-center items-center px-6 sm:px-10 md:px-14 lg:px-16 max-w-7xl mx-auto pt-20 pb-20 pointer-events-none"
           style={{
-            pointerEvents: chapterProgress > 0.4 ? "auto" : "none",
+            pointerEvents: chapterProgress > 0.35 ? "auto" : "none",
           }}
         >
-          <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center my-auto">
-            
-            {/* LEFT SIDE: PRIMARY EDITORIAL STORY (7 cols) */}
-            <div className="lg:col-span-7 flex flex-col space-y-4 sm:space-y-5">
-              
-              {/* Chapter Eyebrow Tag + Evolution Arc */}
-              <div
-                className="flex flex-wrap items-center justify-between gap-3 transition-transform will-change-transform"
-                style={{
-                  opacity: headlineOpacity,
-                  transform: `translate3d(0, ${headlineTranslateY * 0.5}px, 0)`,
-                }}
-              >
-                <div className="flex items-center gap-2.5">
-                  <span className="w-2 h-2 rounded-full bg-[var(--accent)] shadow-[0_0_8px_var(--accent)] animate-pulse" />
-                  <span className="font-mono text-xs uppercase tracking-widest text-[var(--accent)] font-semibold">
-                    CHAPTER 01 — THE HUMAN BEHIND THE MACHINE
-                  </span>
-                </div>
+          <div
+            className="w-full grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center my-auto transition-transform will-change-transform"
+            style={{
+              opacity: contentOpacity,
+              transform: `translate3d(0, ${contentTranslateY}px, 0)`,
+            }}
+          >
+            {/* LEFT SIDE: MINIMAL PRIMARY IDENTITY STATEMENT (7 cols) */}
+            <div className="lg:col-span-7 flex flex-col space-y-4 sm:space-y-6">
 
-                <div className="hidden sm:flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-[#77778A]">
-                  <span className="text-[#D4D4E2]">CURIOSITY</span>
-                  <span className="text-[var(--accent)]">→</span>
-                  <span className="text-[#D4D4E2]">BUILDER</span>
-                  <span className="text-[var(--accent)]">→</span>
-                  <span className="text-[var(--accent)] font-semibold">SYSTEMS</span>
-                </div>
+              {/* Chapter Eyebrow Tag */}
+              <div className="flex items-center gap-2.5">
+                <span className="w-2 h-2 rounded-full bg-[var(--accent)] shadow-[0_0_8px_var(--accent)] animate-pulse" />
+                <span className="font-mono text-xs uppercase tracking-widest text-[var(--accent)] font-semibold">
+                  CHAPTER 01 / ABOUT
+                </span>
               </div>
 
-              {/* Editorial Headline in 2 Clean Lines with Breathing Room */}
-              <div
-                className="transition-transform will-change-transform"
-                style={{
-                  opacity: headlineOpacity,
-                  transform: `translate3d(0, ${headlineTranslateY}px, 0)`,
-                }}
-              >
-                <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.6rem] font-extrabold uppercase tracking-tight text-[#F5F5F7] leading-[1.02]">
-                  BEHIND EVERY SYSTEM <br className="hidden sm:inline" />
-                  IS A <span className="text-[var(--accent)]">QUESTION.</span>
-                </h2>
-              </div>
+              {/* Bold Minimal Identity Heading */}
+              <h2 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black uppercase tracking-tight text-[#F5F5F7] leading-[0.92]">
+                AALI <br />
+                RAHMAN<span className="text-[var(--accent)]">.</span>
+              </h2>
 
-              {/* Personal Human Narrative */}
-              <div
-                className="space-y-3.5 text-sm sm:text-base md:text-[17px] text-[#A6A6B8] leading-relaxed font-body max-w-xl transition-transform will-change-transform"
-                style={{
-                  opacity: narrativeOpacity,
-                  transform: `translate3d(0, ${narrativeTranslateY}px, 0)`,
-                }}
-              >
-                <p>
-                  I&apos;m <strong className="text-[#F5F5F7] font-semibold">{siteConfig.name}</strong> — a developer, builder, and engineering student driven by an insatiable curiosity about how technology works and how ideas become real systems.
-                </p>
-                <p>
-                  For me, engineering is an act of translation. It begins with observing human friction, asking foundational questions, and building with rigor — from intelligent AI architectures and system security research to fluid digital products that feel effortless and alive.
-                </p>
-              </div>
+              {/* Single Core Philosophical Narrative */}
+              <p className="font-body text-base sm:text-lg md:text-xl text-[#9E9EAF] max-w-lg leading-relaxed pt-1">
+                Building systems, exploring ideas, and figuring out what comes next.
+              </p>
 
-              {/* Mobile-only Evolution Arc */}
-              <div
-                className="sm:hidden pt-1 flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-[#77778A]"
-                style={{ opacity: narrativeOpacity }}
-              >
-                <span className="text-[#D4D4E2]">CURIOSITY</span>
-                <span className="text-[var(--accent)]">→</span>
-                <span className="text-[#D4D4E2]">BUILDER</span>
-                <span className="text-[var(--accent)]">→</span>
-                <span className="text-[var(--accent)] font-semibold">SYSTEMS</span>
+              {/* Minimal Invitation Cue */}
+              <div className="flex items-center gap-2.5 font-mono text-[11px] text-[#66667A] tracking-wider pt-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] opacity-80" />
+                <span>CHOOSE AN AREA TO DISCOVER</span>
               </div>
             </div>
 
-            {/* RIGHT SIDE: EDITORIAL IDENTITY SIGNALS (5 cols — NO BOXED CARDS) */}
-            <div
-              className="lg:col-span-5 flex flex-col space-y-3.5 sm:space-y-4 pl-0 lg:pl-8 border-l-0 lg:border-l border-white/[0.08] transition-transform will-change-transform"
-              style={{
-                opacity: metadataOpacity,
-                transform: `translate3d(0, ${metadataTranslateY}px, 0)`,
-              }}
-            >
-              {/* 01 / ORIGIN */}
-              <div className="space-y-0.5">
-                <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-widest text-[#66667A] block font-semibold">
-                  01 / ORIGIN
-                </span>
-                <p className="font-heading font-medium text-base sm:text-lg text-[#EDEDF2]">
-                  {siteConfig.location.city}, {siteConfig.location.country}
-                </p>
-                <p className="font-mono text-[11px] text-[#808095]">
-                  Operating globally across digital environments
-                </p>
-              </div>
+            {/* RIGHT SIDE: 4 INTERACTIVE INFORMATION MODULES (5 cols) */}
+            <div className="lg:col-span-5 flex flex-col space-y-2 sm:space-y-3 pl-0 lg:pl-8 border-l-0 lg:border-l border-white/[0.08]">
+              {modules.map((mod) => (
+                <button
+                  key={mod.id}
+                  onClick={() => setActiveModule(mod.id)}
+                  className="group relative flex items-center justify-between w-full py-4 sm:py-5 border-b border-white/[0.08] text-left cursor-pointer transition-all duration-300 hover:border-[var(--accent)]/50 focus:outline-none"
+                  aria-label={`Open information module ${mod.label}`}
+                >
+                  <div className="flex items-baseline gap-3 sm:gap-4">
+                    <span className="font-mono text-xs text-[#66667A] group-hover:text-[var(--accent)] transition-colors duration-200">
+                      {mod.num}
+                    </span>
+                    <div className="flex flex-col">
+                      <span className="font-display text-lg sm:text-xl md:text-2xl font-bold uppercase tracking-tight text-[#EDEDF2] group-hover:text-[var(--accent)] group-hover:translate-x-1 transition-all duration-200">
+                        {mod.label}
+                      </span>
+                      <span className="font-mono text-[10px] text-[#707085] tracking-widest uppercase mt-0.5">
+                        {mod.tag}
+                      </span>
+                    </div>
+                  </div>
 
-              {/* Hairline Divider */}
-              <div className="h-px w-full bg-white/[0.08]" />
-
-              {/* 02 / CURRENT FOCUS */}
-              <div className="space-y-0.5">
-                <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-widest text-[#66667A] block font-semibold">
-                  02 / CURRENT FOCUS
-                </span>
-                <p className="font-heading font-medium text-sm sm:text-base text-[#EDEDF2] leading-snug">
-                  Software Architecture • AI Systems • Product Engineering
-                </p>
-                <p className="font-mono text-[11px] text-[#808095]">
-                  Translating ambiguous problems into fast, resilient software
-                </p>
-              </div>
-
-              {/* Hairline Divider */}
-              <div className="h-px w-full bg-white/[0.08]" />
-
-              {/* 03 / EDUCATION */}
-              <div className="space-y-0.5">
-                <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-widest text-[#66667A] block font-semibold">
-                  03 / EDUCATION
-                </span>
-                <p className="font-heading font-medium text-sm sm:text-base text-[#EDEDF2] leading-snug">
-                  {siteConfig.education.degree}
-                </p>
-                <p className="text-xs sm:text-sm text-[#A6A6B8]">
-                  {siteConfig.education.specialization}
-                </p>
-                <div className="flex items-center gap-2 pt-0.5 font-mono text-[11px]">
-                  <span className="text-[var(--accent)] font-semibold">
-                    {siteConfig.education.institution}
-                  </span>
-                  <span className="text-[#555566]">•</span>
-                  <span className="text-[#808095]">{siteConfig.education.period}</span>
-                </div>
-              </div>
-
-              {/* Hairline Divider */}
-              <div className="h-px w-full bg-white/[0.08]" />
-
-              {/* 04 / OPERATING PRINCIPLE */}
-              <div className="space-y-0.5">
-                <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-widest text-[#66667A] block font-semibold">
-                  04 / OPERATING PRINCIPLE
-                </span>
-                <p className="font-heading font-medium text-sm sm:text-base text-[var(--accent)]">
-                  Curiosity → Experimentation → Execution
-                </p>
-                <p className="font-mono text-[11px] text-[#808095]">
-                  Observe first, architect cleanly, refine through human feedback
-                </p>
-              </div>
+                  <div className="w-8 h-8 rounded-full border border-white/[0.1] group-hover:border-[var(--accent)] group-hover:bg-[var(--accent)]/10 flex items-center justify-center transition-all duration-200 shrink-0">
+                    <ArrowUpRight className="w-4 h-4 text-[#808095] group-hover:text-[var(--accent)] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-200" />
+                  </div>
+                </button>
+              ))}
             </div>
 
           </div>
         </div>
+
+        {/* ========================================================================= */}
+        {/* CINEMATIC OVERLAY: IMMERSIVE AALI OS INTERFACE LAYER                       */}
+        {/* ========================================================================= */}
+        <AnimatePresence>
+          {activeModule && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.28, ease: "easeOut" }}
+              className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-10 bg-[#07060B]/85 backdrop-blur-2xl"
+              onClick={() => setActiveModule(null)}
+              role="dialog"
+              aria-modal="true"
+            >
+              <motion.div
+                initial={{ scale: 0.96, opacity: 0, y: 16 }}
+                animate={{ scale: 1, opacity: 1, y: 0 }}
+                exit={{ scale: 0.96, opacity: 0, y: 12 }}
+                transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+                onClick={(e) => e.stopPropagation()}
+                className="relative w-full max-w-3xl bg-[#0B0916]/95 border border-white/[0.12] rounded-3xl p-6 sm:p-10 md:p-12 shadow-[0_0_50px_rgba(0,0,0,0.8)] overflow-hidden"
+              >
+                {/* Background Ambient Glow inside panel */}
+                <div className="absolute top-0 right-0 w-64 h-64 bg-[var(--accent)]/10 rounded-full blur-3xl pointer-events-none" />
+
+                {/* Header Bar */}
+                <div className="flex items-center justify-between border-b border-white/[0.08] pb-5 mb-8">
+                  <div className="flex items-center gap-3">
+                    <span className="w-2 h-2 rounded-full bg-[var(--accent)] shadow-[0_0_8px_var(--accent)]" />
+                    <span className="font-mono text-xs uppercase tracking-widest text-[#88889A] font-semibold">
+                      AALI OS // IDENTITY // MODULE{" "}
+                      {modules.find((m) => m.id === activeModule)?.num}
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={() => setActiveModule(null)}
+                    className="group flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/[0.15] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors cursor-pointer text-xs font-mono tracking-wider text-[#A0A0B0]"
+                    aria-label="Close information module"
+                  >
+                    <span>CLOSE</span>
+                    <X className="w-3.5 h-3.5 transition-transform duration-200 group-hover:rotate-90" />
+                  </button>
+                </div>
+
+                {/* Module Dynamic Content */}
+                <div className="space-y-6">
+                  {/* ---------------- 01: WHO I AM ---------------- */}
+                  {activeModule === "who" && (
+                    <div className="space-y-6">
+                      <div className="space-y-2">
+                        <span className="font-mono text-xs text-[var(--accent)] uppercase tracking-widest">
+                          01 — WHO I AM
+                        </span>
+                        <h3 className="font-display text-3xl sm:text-4xl font-extrabold uppercase text-[#F5F5F7]">
+                          THE HUMAN BEHIND THE MACHINE.
+                        </h3>
+                      </div>
+
+                      <div className="space-y-4 text-base sm:text-lg text-[#A6A6B8] font-body leading-relaxed">
+                        <p>
+                          I&apos;m <strong className="text-[#F5F5F7] font-semibold">{siteConfig.name}</strong> — a software developer, builder, and engineering student driven by an insatiable curiosity about how technology works under the surface.
+                        </p>
+                        <p>
+                          I thrive on turning raw ideas into working digital systems. Whether analyzing system architectures or questioning defaults, I treat code as a precision tool for crafting fast, resilient software.
+                        </p>
+                        <p className="text-sm sm:text-base text-[#888899]">
+                          Beyond programming, I value human simplicity, deep technical focus, and tools that feel effortless to those who rely on them.
+                        </p>
+                      </div>
+
+                      <div className="pt-2 flex items-center gap-3 font-mono text-xs text-[var(--accent)]">
+                        <span>ORIGIN: {siteConfig.location.city.toUpperCase()}, {siteConfig.location.country.toUpperCase()}</span>
+                        <span>•</span>
+                        <span>OPERATING GLOBALLY</span>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ---------------- 02: WHAT I BUILD ---------------- */}
+                  {activeModule === "build" && (
+                    <div className="space-y-6">
+                      <div className="space-y-2">
+                        <span className="font-mono text-xs text-[var(--accent)] uppercase tracking-widest">
+                          02 — WHAT I BUILD
+                        </span>
+                        <h3 className="font-display text-3xl sm:text-4xl font-extrabold uppercase text-[#F5F5F7]">
+                          SYSTEMS, INTERFACES &amp; INTELLIGENCE.
+                        </h3>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+                        <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.06] space-y-1.5">
+                          <span className="font-mono text-xs text-[var(--accent)] font-semibold">
+                            01 / FULL-STACK SYSTEMS
+                          </span>
+                          <p className="font-heading font-medium text-sm sm:text-base text-[#EDEDF2]">
+                            High-performance web applications, responsive architectures, and fluid interactive frontends.
+                          </p>
+                        </div>
+
+                        <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.06] space-y-1.5">
+                          <span className="font-mono text-xs text-[var(--accent)] font-semibold">
+                            02 / AI &amp; INTELLIGENCE
+                          </span>
+                          <p className="font-heading font-medium text-sm sm:text-base text-[#EDEDF2]">
+                            Context-aware AI workflows, generative agents, and neural pipelines that augment human thought.
+                          </p>
+                        </div>
+
+                        <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.06] space-y-1.5">
+                          <span className="font-mono text-xs text-[var(--accent)] font-semibold">
+                            03 / PRODUCT ENGINEERING
+                          </span>
+                          <p className="font-heading font-medium text-sm sm:text-base text-[#EDEDF2]">
+                            Human-first software where visual elegance, micro-animations, and engineering rigor unite.
+                          </p>
+                        </div>
+
+                        <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/[0.06] space-y-1.5">
+                          <span className="font-mono text-xs text-[var(--accent)] font-semibold">
+                            04 / SYSTEM SECURITY
+                          </span>
+                          <p className="font-heading font-medium text-sm sm:text-base text-[#EDEDF2]">
+                            Low-level vulnerability research, JVM memory safety, and published security frameworks.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ---------------- 03: MY JOURNEY ---------------- */}
+                  {activeModule === "journey" && (
+                    <div className="space-y-6">
+                      <div className="space-y-2">
+                        <span className="font-mono text-xs text-[var(--accent)] uppercase tracking-widest">
+                          03 — MY JOURNEY
+                        </span>
+                        <h3 className="font-display text-3xl sm:text-4xl font-extrabold uppercase text-[#F5F5F7]">
+                          THE TIMELINE OF A BUILDER.
+                        </h3>
+                      </div>
+
+                      {/* Minimalist Vertical Timeline */}
+                      <div className="relative pl-6 space-y-8 border-l border-white/[0.12] my-4">
+                        {/* 2025 Node */}
+                        <div className="relative space-y-1">
+                          <div className="absolute -left-[31px] top-1.5 w-2.5 h-2.5 rounded-full bg-white/40 border-2 border-[#0B0916]" />
+                          <span className="font-mono text-xs text-[#888899] font-semibold">2025</span>
+                          <p className="font-heading font-semibold text-base text-[#EDEDF2]">
+                            Started Computer Science &amp; Engineering
+                          </p>
+                          <p className="text-sm text-[#A6A6B8]">
+                            Began formal engineering foundation, quickly transitioning curiosity into real software systems and research.
+                          </p>
+                        </div>
+
+                        {/* NOW Node */}
+                        <div className="relative space-y-1">
+                          <div className="absolute -left-[31px] top-1.5 w-2.5 h-2.5 rounded-full bg-[var(--accent)] shadow-[0_0_10px_var(--accent)] border-2 border-[#0B0916]" />
+                          <span className="font-mono text-xs text-[var(--accent)] font-bold">NOW</span>
+                          <p className="font-heading font-semibold text-base text-[#EDEDF2]">
+                            Building, Architecting &amp; Shipping
+                          </p>
+                          <p className="text-sm text-[#A6A6B8]">
+                            Developing full-scale products (Priora, CypherGuard, Synapse OS), exploring intelligent AI architectures, and publishing security research.
+                          </p>
+                        </div>
+
+                        {/* NEXT Node */}
+                        <div className="relative space-y-1">
+                          <div className="absolute -left-[31px] top-1.5 w-2.5 h-2.5 rounded-full bg-white/20 border-2 border-[#0B0916]" />
+                          <span className="font-mono text-xs text-[#66667A]">NEXT</span>
+                          <p className="font-heading font-semibold text-base text-[#A0A0B2]">
+                            Still Being Written.
+                          </p>
+                          <p className="text-sm text-[#77778A]">
+                            Pushing the boundaries of what software and human-machine intelligence can accomplish.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* ---------------- 04: CURRENTLY ---------------- */}
+                  {activeModule === "currently" && (
+                    <div className="space-y-6">
+                      <div className="space-y-2">
+                        <span className="font-mono text-xs text-[var(--accent)] uppercase tracking-widest">
+                          04 — CURRENTLY
+                        </span>
+                        <h3 className="font-display text-3xl sm:text-4xl font-extrabold uppercase text-[#F5F5F7]">
+                          CURRENT FOCUS &amp; FOUNDATION.
+                        </h3>
+                      </div>
+
+                      <div className="space-y-5">
+                        <div className="space-y-2">
+                          <span className="font-mono text-xs text-[#808095] uppercase tracking-widest block">
+                            CURRENTLY EXPLORING
+                          </span>
+                          <div className="flex flex-wrap gap-2">
+                            {["Software Engineering", "Artificial Intelligence", "Product Architecture", "System Security"].map((item) => (
+                              <span
+                                key={item}
+                                className="font-mono text-xs px-3.5 py-1.5 rounded-full bg-white/[0.04] text-[#EDEDF2] border border-white/[0.08]"
+                              >
+                                {item}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        <div className="h-px w-full bg-white/[0.08]" />
+
+                        <div className="space-y-1.5">
+                          <span className="font-mono text-xs text-[#808095] uppercase tracking-widest block">
+                            ACADEMIC FOUNDATION
+                          </span>
+                          <p className="font-heading font-semibold text-base sm:text-lg text-[#EDEDF2]">
+                            {siteConfig.education.degree}
+                          </p>
+                          <p className="text-sm text-[#A6A6B8]">
+                            {siteConfig.education.specialization}
+                          </p>
+                          <p className="font-mono text-xs text-[var(--accent)] pt-0.5">
+                            {siteConfig.education.institution} • {siteConfig.education.period}
+                          </p>
+                        </div>
+
+                        <div className="h-px w-full bg-white/[0.08]" />
+
+                        <div className="space-y-1">
+                          <span className="font-mono text-xs text-[#808095] uppercase tracking-widest block">
+                            OPERATING PRINCIPLE
+                          </span>
+                          <p className="font-heading font-medium text-base text-[var(--accent)]">
+                            Curiosity → Experimentation → Execution
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* ========================================================================= */}
         {/* FOREGROUND TOP EYEBROW & BOTTOM SCROLL CUE                                */}
@@ -399,15 +581,15 @@ export function HeroSection() {
                 {scrollProgress < 0.55
                   ? "[ STAGE 01 — SIGN THE SCREEN ]"
                   : scrollProgress < 0.85
-                  ? "[ STAGE 02 — HERO RECEDING ]"
-                  : "[ CHAPTER 01 — THE HUMAN BEHIND THE MACHINE ]"}
+                    ? "[ STAGE 02 — HERO RECEDING ]"
+                    : "[ CHAPTER 01 / ABOUT ]"}
               </span>
               <span className="hidden sm:inline text-xs text-[var(--text-muted)]">
                 {scrollProgress < 0.55
                   ? "SCROLL TO DRAW SIGNATURE"
                   : scrollProgress < 0.85
-                  ? "SCROLL FOR PERSONAL STORY"
-                  : "CONTINUE SCROLLING FOR SELECTED WORK"}
+                    ? "SCROLL FOR PERSONAL IDENTITY"
+                    : "CONTINUE SCROLLING FOR SELECTED WORK"}
               </span>
             </div>
 

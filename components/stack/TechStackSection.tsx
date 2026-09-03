@@ -41,11 +41,10 @@ export function TechStackSection() {
             <button
               key={cat.id}
               onClick={() => setActiveCategoryId(cat.id)}
-              className={`px-5 py-2.5 rounded-full font-mono text-xs uppercase tracking-wider font-semibold transition-all cursor-pointer border ${
-                isActive
+              className={`px-5 py-2.5 rounded-full font-mono text-xs uppercase tracking-wider font-semibold transition-all cursor-pointer border ${isActive
                   ? "bg-[var(--text-primary)] text-[var(--bg-primary)] border-[var(--text-primary)] shadow-md"
                   : "bg-[var(--bg-secondary)] text-[var(--text-secondary)] border-[var(--border-subtle)] hover:border-[var(--text-primary)]"
-              }`}
+                }`}
             >
               {cat.name}
             </button>

@@ -39,7 +39,7 @@ export function ContactFooter() {
       className="relative w-full bg-[#0A0A0A] text-[#F4F4F0] pt-24 md:pt-36 pb-16 px-4 sm:px-6 md:px-12 lg:px-16 border-t border-[rgba(255,255,255,0.12)] overflow-hidden"
     >
       <div className="max-w-7xl mx-auto">
-        
+
         {/* Section Header */}
         <div className="flex items-center justify-between pb-8 border-b border-[rgba(255,255,255,0.12)] mb-16 md:mb-24">
           <div className="flex items-center gap-3">
@@ -50,7 +50,7 @@ export function ContactFooter() {
               GET IN TOUCH / COLLABORATE
             </span>
           </div>
-          
+
           <div className="flex items-center gap-2 font-mono text-xs text-[#A0A0A0]">
             <Clock className="w-3.5 h-3.5 text-[var(--accent)]" />
             <span>HYDERABAD, IN: {time || "07:30 PM"}</span>

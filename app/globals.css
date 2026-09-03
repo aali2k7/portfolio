@@ -7,16 +7,16 @@
   --bg-tertiary: #141124;
   --bg-card: #0F0D1C;
   --bg-dark: #040307;
-  
+
   --text-primary: #F5F5F7;
   --text-secondary: #A3A3B5;
   --text-muted: #66667D;
   --text-inverse: #07060B;
-  
+
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-strong: rgba(255, 255, 255, 0.16);
   --border-dark: rgba(255, 255, 255, 0.24);
-  
+
   /* Primary Accent (Vibrant Neon/Lime Green) */
   --accent: #5AFF15;
   --accent-glow: rgba(90, 255, 21, 0.35);
@@ -29,18 +29,18 @@
   --color-bg-tertiary: var(--bg-tertiary);
   --color-bg-card: var(--bg-card);
   --color-bg-dark: var(--bg-dark);
-  
+
   --color-text-primary: var(--text-primary);
   --color-text-secondary: var(--text-secondary);
   --color-text-muted: var(--text-muted);
   --color-text-inverse: var(--text-inverse);
-  
+
   --color-border-subtle: var(--border-subtle);
   --color-border-strong: var(--border-strong);
-  
+
   --color-accent: var(--accent);
   --color-accent-glow: var(--accent-glow);
-  
+
   --font-display: var(--font-syne), sans-serif;
   --font-body: var(--font-jakarta), sans-serif;
   --font-heading: var(--font-space-grotesk), sans-serif;
@@ -124,13 +124,16 @@ body {
 ::-webkit-scrollbar {
   width: 6px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--bg-primary);
 }
+
 ::-webkit-scrollbar-thumb {
   background: rgba(255, 255, 255, 0.16);
   border-radius: 3px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(90, 255, 21, 0.4);
 }
@@ -140,6 +143,7 @@ body {
   0% {
     transform: translate3d(0, 0, 0);
   }
+
   100% {
     transform: translate3d(-50%, 0, 0);
   }
@@ -149,6 +153,7 @@ body {
   0% {
     transform: translate3d(-50%, 0, 0);
   }
+
   100% {
     transform: translate3d(0, 0, 0);
   }
@@ -177,15 +182,20 @@ body {
 
 /* Signature Organic Floating Idle Keyframes */
 @keyframes signature-idle-float {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
   }
+
   25% {
     transform: translate3d(1.5px, -3.5px, 0) rotate(0.4deg) scale(1.004);
   }
+
   50% {
     transform: translate3d(-1px, -5px, 0) rotate(-0.3deg) scale(1.008);
   }
+
   75% {
     transform: translate3d(-2px, -2px, 0) rotate(-0.6deg) scale(1.003);
   }
@@ -198,6 +208,7 @@ body {
 
 /* Accessibility: prefers-reduced-motion overrides */
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
