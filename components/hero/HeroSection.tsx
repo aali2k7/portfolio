@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
+import Image from "next/image";
 import { siteConfig } from "@/data/siteConfig";
 import { HeroBackgroundVideo } from "./HeroBackgroundVideo";
 import { SignatureReveal } from "@/components/signature/SignatureReveal";
@@ -34,228 +35,183 @@ export function HeroSection() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // -------------------------------------------------------------
+  // ---------------------------------------------------------------------------
   // CHOREOGRAPHY TIMELINE CALCULATIONS (0.0 -> 1.0)
-  // -------------------------------------------------------------
+  // ---------------------------------------------------------------------------
 
-  // Phase 1 -> 2: Text Fade Out (0.10 -> 0.32)
-  const textFadeProgress = Math.max(0, Math.min(1, (scrollProgress - 0.10) / 0.22));
-  const textOpacity = Math.max(0, 1 - textFadeProgress);
-  const textTranslateY = -textFadeProgress * 36;
-  const textBlur = textFadeProgress * 3;
+  // Phase 1 (0.0 -> 0.35): Initial visual impact & signature draw
+  // Phase 2 (0.35 -> 0.70): Typographic separation & depth parallax
+  // Phase 3 (0.70 -> 1.00): Signature sweep & dimensional activation
 
-  // Phase 3 -> 4: Signature Emergence & Massive Takeover (0.35 -> 0.75)
-  const sigEmergeProgress = Math.max(0, Math.min(1, (scrollProgress - 0.35) / 0.20));
-  const sigDominanceProgress = Math.max(0, Math.min(1, (scrollProgress - 0.52) / 0.22));
-  
-  const signatureOpacity = Math.min(1, sigEmergeProgress * 1.5);
-  // Signature scale: from 0.6 -> 1.0 (emerge), then 1.0 -> 2.4 (takeover)
-  const signatureScale = 0.6 + sigEmergeProgress * 0.4 + sigDominanceProgress * 1.4;
+  // Parallax shifts for the massive typography behind the portrait
+  const topTextShiftX = -scrollProgress * 95; // Top line drifts left
+  const bottomTextShiftX = scrollProgress * 95; // Bottom line drifts right
+  const typoDepthBlur = Math.min(6, Math.max(0, (scrollProgress - 0.5) * 12));
+  const typoOpacity = Math.max(0.2, 1 - Math.max(0, scrollProgress - 0.7) * 3);
 
-  // Phase 5: Screen Split Transition (0.75 -> 1.00)
-  const splitProgressRaw = Math.max(0, Math.min(1, (scrollProgress - 0.74) / 0.24));
-  // Smooth cubic acceleration for split
-  const splitEased = Math.pow(splitProgressRaw, 1.4);
-  const splitTranslateX = splitEased * 105; // moves from 0% to 105% offscreen
+  // Portrait scale & subtle elevation
+  const portraitScale = 1 + scrollProgress * 0.08;
+  const portraitTranslateY = scrollProgress * 25;
+  const portraitOpacity = Math.max(0, 1 - Math.max(0, scrollProgress - 0.78) * 4);
 
-  // Revealed Layer Underneath Split Panels (0.74 -> 1.00)
-  const revealProgress = Math.max(0, Math.min(1, (scrollProgress - 0.74) / 0.26));
-  const revealScale = 0.94 + revealProgress * 0.06;
-  const revealTranslateY = (1 - revealProgress) * 40;
-  const revealOpacity = Math.min(1, revealProgress * 1.8);
+  // Signature emergence and takeover
+  const sigRevealProgress = Math.min(1, scrollProgress * 2.8 + 0.35);
+  const sigScale = 1 + Math.max(0, scrollProgress - 0.45) * 1.8;
+  const sigTranslateX = Math.max(0, scrollProgress - 0.72) * 120; // sweeps right on exit
+  const sigOpacity = Math.max(0, 1 - Math.max(0, scrollProgress - 0.88) * 8);
+
+  // Foreground UI fade
+  const uiOpacity = Math.max(0, 1 - scrollProgress * 2.5);
 
   return (
     <div
       id="hero"
       ref={trackRef}
-      className="relative w-full h-[380vh] bg-[var(--bg-primary)] select-none overflow-x-clip"
+      className="relative w-full h-[320vh] bg-[var(--bg-primary)] select-none overflow-x-clip"
     >
-      {/* Pinned Sticky Viewport (100vh / 100dvh) */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden bg-[var(--bg-primary)]">
+      {/* Sticky Viewport Container */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden bg-[var(--bg-primary)] flex flex-col justify-between">
         
         {/* ========================================================================= */}
-        {/* LAYER 0: UNDERLYING REVEALED CONTENT (Visible as Screen Splits)           */}
+        {/* LAYER 1: DEEP NAVY / PURPLE ATMOSPHERE & GENERATIVE ORGANIC CONTOUR       */}
+        {/* ========================================================================= */}
+        <HeroBackgroundVideo />
+
+        {/* Deep ambient center glow */}
+        <div className="absolute inset-0 pointer-events-none ambient-glow-purple z-0" />
+        <div className="absolute inset-0 pointer-events-none ambient-glow-neon opacity-40 z-0" />
+
+        {/* ========================================================================= */}
+        {/* LAYER 2: MASSIVE TYPOGRAPHY (GENUINELY BEHIND PORTRAIT & OVERSIZED)        */}
         {/* ========================================================================= */}
         <div
-          className="absolute inset-0 z-0 flex flex-col justify-center items-center px-6 md:px-16 text-center pointer-events-none"
+          className="absolute inset-0 z-10 flex flex-col justify-center items-center pointer-events-none overflow-hidden select-none will-change-transform"
           style={{
-            transform: `scale(${revealScale}) translateY(${revealTranslateY}px)`,
-            opacity: revealOpacity,
+            opacity: typoOpacity,
+            filter: `blur(${typoDepthBlur}px)`,
           }}
         >
-          {/* Subtle background for reveal */}
-          <div className="absolute inset-0 bg-[var(--bg-primary)] opacity-95" />
-          
-          <div className="relative z-10 max-w-5xl mx-auto flex flex-col items-center">
-            <div className="flex items-center gap-2 mb-6">
-              <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
-              <span className="font-mono text-xs uppercase tracking-widest text-[var(--text-muted)] font-semibold">
-                CHAPTER 02 — THE PHILOSOPHY
-              </span>
-            </div>
-
-            <h2 className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold uppercase tracking-tight text-[var(--text-primary)] leading-[0.92]">
+          {/* Top Line 1: Extends beyond left/right edges */}
+          <div
+            className="w-full flex justify-center whitespace-nowrap will-change-transform"
+            style={{
+              transform: `translate3d(${topTextShiftX}px, 0, 0)`,
+            }}
+          >
+            <span className="font-display font-black text-[13vw] sm:text-[11vw] md:text-[9.5vw] lg:text-[8.5vw] leading-[0.82] tracking-tighter uppercase text-[#F5F5F7] opacity-90 drop-shadow-2xl">
               THE BEST SOLUTIONS
-              <span className="block text-[var(--accent)] mt-2">DON&apos;T START WITH CODE.</span>
-              <span className="block text-[var(--text-secondary)] text-2xl sm:text-4xl md:text-5xl mt-4 font-heading font-semibold">
-                THEY START WITH A QUESTION.
-              </span>
-            </h2>
+            </span>
+          </div>
 
-            <p className="mt-8 font-mono text-xs text-[var(--text-muted)] tracking-widest uppercase">
-              ↓ ENTERING PORTFOLIO EXPERIENCE
-            </p>
+          {/* Middle Line 2: Heavy bold statement */}
+          <div
+            className="w-full flex justify-center whitespace-nowrap my-1 md:my-2 will-change-transform"
+            style={{
+              transform: `translate3d(${-topTextShiftX * 0.6}px, 0, 0)`,
+            }}
+          >
+            <span className="font-display font-black text-[12vw] sm:text-[10vw] md:text-[8.8vw] lg:text-[7.8vw] leading-[0.82] tracking-tighter uppercase text-[#D4D4E2] opacity-80">
+              DON&apos;T START WITH CODE.
+            </span>
+          </div>
+
+          {/* Bottom Line 3: Resolution */}
+          <div
+            className="w-full flex justify-center whitespace-nowrap will-change-transform"
+            style={{
+              transform: `translate3d(${bottomTextShiftX}px, 0, 0)`,
+            }}
+          >
+            <span className="font-display font-black text-[13.5vw] sm:text-[11.5vw] md:text-[10vw] lg:text-[9vw] leading-[0.82] tracking-tighter uppercase text-[#A3A3B8] opacity-70">
+              THEY START WITH A QUESTION.
+            </span>
           </div>
         </div>
 
         {/* ========================================================================= */}
-        {/* SPLIT SCREEN CONTAINER (LEFT HALF & RIGHT HALF PANELS)                     */}
+        {/* LAYER 3: CINEMATIC MONOCHROME PORTRAIT (Sits on top of Typography)        */}
         {/* ========================================================================= */}
-
-        {/* --- LEFT SPLIT PANEL (Moves Left during Phase 5) --- */}
         <div
-          className="absolute inset-0 z-20 w-full h-full pointer-events-none will-change-transform"
+          className="absolute inset-0 z-20 flex items-end justify-center pointer-events-none pb-0 will-change-transform"
           style={{
-            clipPath: "polygon(0 0, 50% 0, 50% 100%, 0 100%)",
-            transform: `translate3d(-${splitTranslateX}%, 0, 0)`,
+            opacity: portraitOpacity,
+            transform: `scale(${portraitScale}) translate3d(0, ${portraitTranslateY}px, 0)`,
           }}
         >
-          {/* Background within Left Panel */}
-          <HeroBackgroundVideo />
+          {/* Portrait Container with feathered base & sides */}
+          <div className="relative w-[340px] sm:w-[440px] md:w-[540px] lg:w-[620px] h-[68vh] sm:h-[76vh] md:h-[84vh] max-h-[920px]">
+            <Image
+              src="/images/portrait-cinematic.png"
+              alt={siteConfig.name}
+              fill
+              priority
+              sizes="(max-width: 768px) 90vw, (max-width: 1200px) 60vw, 620px"
+              className="object-contain object-bottom select-none"
+            />
 
-          {/* Left Half Massive Signature Takeover Layer */}
-          <div
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
-            style={{
-              opacity: signatureOpacity,
-              transform: `scale(${signatureScale})`,
-            }}
-          >
-            <SignatureReveal isMassive progress={sigEmergeProgress} />
+            {/* Bottom seamless shadow feathering into dark background */}
+            <div className="absolute bottom-0 left-0 right-0 h-36 bg-gradient-to-t from-[var(--bg-primary)] via-[rgba(7,6,11,0.85)] to-transparent pointer-events-none" />
           </div>
         </div>
 
-        {/* --- RIGHT SPLIT PANEL (Moves Right during Phase 5) --- */}
+        {/* ========================================================================= */}
+        {/* LAYER 4: HANDWRITTEN NEON LIME SIGNATURE (Prominently Stamped on Top)      */}
+        {/* ========================================================================= */}
         <div
-          className="absolute inset-0 z-20 w-full h-full pointer-events-none will-change-transform"
+          className="absolute inset-0 z-30 flex items-center justify-center pointer-events-none will-change-transform"
           style={{
-            clipPath: "polygon(50% 0, 100% 0, 100% 100%, 50% 100%)",
-            transform: `translate3d(${splitTranslateX}%, 0, 0)`,
+            opacity: sigOpacity,
+            transform: `translate3d(${sigTranslateX}px, 0, 0) scale(${sigScale})`,
           }}
         >
-          {/* Background within Right Panel */}
-          <HeroBackgroundVideo />
-
-          {/* Right Half Massive Signature Takeover Layer */}
-          <div
-            className="absolute inset-0 flex items-center justify-center pointer-events-none"
-            style={{
-              opacity: signatureOpacity,
-              transform: `scale(${signatureScale})`,
-            }}
-          >
-            <SignatureReveal isMassive progress={sigEmergeProgress} />
+          {/* Signature overlay positioned across portrait & typography */}
+          <div className="relative -mt-12 sm:-mt-16 md:-mt-20">
+            <SignatureReveal
+              progress={sigRevealProgress}
+              isMassive
+              glow
+              className="drop-shadow-[0_0_24px_rgba(90,255,21,0.45)]"
+            />
           </div>
         </div>
 
-        {/* Seam Line Indicator during initial split motion */}
-        {splitProgressRaw > 0.02 && splitProgressRaw < 0.98 && (
-          <div
-            className="absolute top-0 bottom-0 left-1/2 -translate-x-1/2 w-[2px] bg-[var(--accent)] z-30 pointer-events-none opacity-80"
-            style={{
-              opacity: 1 - splitProgressRaw,
-            }}
-          />
-        )}
-
         {/* ========================================================================= */}
-        {/* LAYER 1: FULL-WIDTH TYPOGRAPHY HERO SCENE (Phases 1 - 2)                   */}
-        {/* Fades smoothly out as Signature Takeover and Screen Split take over       */}
+        {/* LAYER 5: FOREGROUND EDITORIAL MICRO-UI & SCROLL CUES                       */}
         {/* ========================================================================= */}
         <div
-          className="absolute inset-0 z-30 w-full h-full flex flex-col justify-between pt-20 md:pt-24 pb-6 px-4 sm:px-6 md:px-12 lg:px-16 max-w-7xl mx-auto pointer-events-none"
+          className="relative z-40 w-full flex flex-col justify-between h-full pt-20 md:pt-24 pb-6 px-4 sm:px-6 md:px-12 lg:px-16 max-w-7xl mx-auto pointer-events-none"
           style={{
-            opacity: Math.max(0, 1 - sigDominanceProgress * 1.5),
+            opacity: uiOpacity,
           }}
         >
-          {/* Top Eyebrow Bar (Fades with text) */}
-          <div
-            className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-subtle)] pb-4 transition-transform duration-75"
-            style={{
-              opacity: textOpacity,
-              transform: `translate3d(0, ${textTranslateY * 0.5}px, 0)`,
-            }}
-          >
+          {/* Top Eyebrow Status Bar */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[var(--border-subtle)] pb-4">
             <div className="flex items-center gap-3">
-              <span className="w-2.5 h-2.5 rounded-full bg-[var(--accent)] animate-pulse" />
+              <span className="w-2.5 h-2.5 rounded-full bg-[var(--accent)] animate-pulse shadow-[0_0_10px_var(--accent)]" />
               <span className="font-mono text-[11px] sm:text-xs uppercase tracking-widest text-[var(--text-muted)] font-semibold">
-                PORTFOLIO / 2026 EDITION
+                IDENTITY TRANSFORMATION / 2026
               </span>
             </div>
 
             <div className="flex items-center gap-2 font-mono text-[11px] sm:text-xs text-[var(--text-muted)] tracking-wider">
               <span>{siteConfig.location.city.toUpperCase()}, {siteConfig.location.country.toUpperCase()}</span>
               <span>•</span>
-              <span className="text-[var(--text-primary)] font-semibold">AVAILABLE FOR AMBITIOUS PROJECTS</span>
+              <span className="text-[var(--text-primary)] font-semibold">ENGINEERING &amp; AI SYSTEMS</span>
             </div>
           </div>
 
-          {/* MAIN FULL-WIDTH EDITORIAL TYPOGRAPHY COMPOSITION */}
-          <div
-            className="my-auto py-8 md:py-12 w-full flex flex-col justify-center pointer-events-auto"
-            style={{
-              opacity: textOpacity,
-              transform: `translate3d(0, ${textTranslateY}px, 0)`,
-              filter: `blur(${textBlur}px)`,
-            }}
-          >
-            {/* Massive Full-Width Name Headline */}
-            <h1 className="font-display text-hero-title text-[var(--text-primary)] tracking-tighter uppercase font-extrabold select-none leading-[0.86]">
-              AALI
-              <span className="block text-[var(--text-primary)] relative">
-                RAHMAN<span className="text-[var(--accent)]">.</span>
+          {/* Bottom Philosophy Cue & Scroll Prompt */}
+          <div className="flex items-end justify-between pt-4 border-t border-[var(--border-subtle)] font-mono text-[11px] uppercase tracking-widest text-[var(--text-muted)]">
+            <div className="flex flex-col gap-1">
+              <span className="text-[var(--text-primary)] font-bold">[ PHILOSOPHY CORE ]</span>
+              <span className="hidden sm:inline text-xs text-[var(--text-muted)]">
+                PROBLEM-FIRST ARCHITECTURE
               </span>
-            </h1>
-
-            {/* Problem-First Positioning Statement & Pillars */}
-            <div className="mt-8 md:mt-12 pt-6 border-t border-[var(--border-subtle)] grid grid-cols-1 md:grid-cols-12 gap-6 md:gap-8 items-end">
-              {/* Main Statement on Left */}
-              <div className="md:col-span-8">
-                <p className="font-heading text-lg sm:text-2xl md:text-3xl text-[var(--text-primary)] font-semibold leading-tight tracking-tight max-w-3xl">
-                  I DON&apos;T START WITH CODE.
-                  <span className="block text-[var(--accent)]">I START WITH THE PROBLEM.</span>
-                </p>
-              </div>
-
-              {/* Pillars on Right */}
-              <div className="md:col-span-4 flex md:justify-end">
-                <div className="flex flex-col gap-1.5 font-mono text-xs text-[var(--text-secondary)] font-medium md:text-right">
-                  <div className="flex items-center md:justify-end gap-1.5 text-[var(--accent)] font-semibold">
-                    <Sparkles className="w-3 h-3" />
-                    <span>FULL-STACK ARCHITECTURE</span>
-                  </div>
-                  <div className="flex items-center md:justify-end gap-1.5 text-[var(--text-muted)]">
-                    <span>AI &amp; PRODUCT ENGINEERING</span>
-                  </div>
-                  <div className="flex items-center md:justify-end gap-1.5 text-[var(--text-muted)]">
-                    <span>SYSTEM SECURITY RESEARCH</span>
-                  </div>
-                </div>
-              </div>
             </div>
-          </div>
 
-          {/* Bottom Scroll Cue */}
-          <div
-            className="flex items-center justify-between pt-4 border-t border-[var(--border-subtle)] font-mono text-[11px] uppercase tracking-widest text-[var(--text-muted)]"
-            style={{
-              opacity: textOpacity,
-              transform: `translate3d(0, ${textTranslateY * 0.5}px, 0)`,
-            }}
-          >
-            <span>[ 01 — IDENTITY TRANSFORMATION ]</span>
-            <div className="flex items-center gap-2 text-[var(--text-primary)] font-semibold">
-              <span>SCROLL TO EXPLORE</span>
+            <div className="flex items-center gap-2 text-[var(--accent)] font-semibold">
+              <Sparkles className="w-3.5 h-3.5 animate-pulse" />
+              <span>SCROLL TO UNLEASH SELECTED WORK</span>
               <ArrowDown className="w-3.5 h-3.5 animate-bounce text-[var(--accent)]" />
             </div>
           </div>

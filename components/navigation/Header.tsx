@@ -17,8 +17,8 @@ export function Header() {
       // Simple active section detection
       const sections = [
         "hero",
-        "about",
         "projects",
+        "about",
         "experience",
         "research",
         "stack",
@@ -54,7 +54,7 @@ export function Header() {
       <header
         className={`fixed top-0 left-0 right-0 z-40 px-4 md:px-8 py-4 transition-all duration-300 ${
           isScrolled
-            ? "backdrop-blur-md bg-[rgba(244,244,240,0.85)] border-b border-[rgba(10,10,10,0.06)] py-3.5"
+            ? "backdrop-blur-md bg-[rgba(7,6,11,0.85)] border-b border-[rgba(255,255,255,0.08)] py-3.5"
             : "bg-transparent"
         }`}
       >
@@ -65,11 +65,11 @@ export function Header() {
             className="group flex items-center gap-2.5 text-left cursor-pointer focus:outline-none"
             aria-label="Scroll to top"
           >
-            <span className="w-2 h-2 rounded-full bg-[var(--accent)] group-hover:scale-125 transition-transform" />
+            <span className="w-2 h-2 rounded-full bg-[var(--accent)] shadow-[0_0_8px_var(--accent)] group-hover:scale-125 transition-transform" />
             <span className="font-display font-extrabold text-sm sm:text-base tracking-tight text-[var(--text-primary)]">
               {siteConfig.name.toUpperCase()}
             </span>
-            <span className="hidden sm:inline font-mono text-[11px] text-[var(--text-muted)] tracking-wider border-l border-[rgba(10,10,10,0.15)] pl-2.5">
+            <span className="hidden sm:inline font-mono text-[11px] text-[var(--text-muted)] tracking-wider border-l border-[rgba(255,255,255,0.15)] pl-2.5">
               DEV / PRODUCT
             </span>
           </button>
@@ -78,14 +78,14 @@ export function Header() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => handleNavigate("contact")}
-              className="hidden sm:inline-flex items-center text-xs font-mono tracking-wider font-semibold px-4 py-2 rounded-full border border-[rgba(10,10,10,0.15)] hover:border-[var(--text-primary)] hover:bg-[var(--text-primary)] hover:text-[var(--bg-primary)] transition-all cursor-pointer"
+              className="hidden sm:inline-flex items-center text-xs font-mono tracking-wider font-semibold px-4 py-2 rounded-full border border-[rgba(255,255,255,0.15)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all cursor-pointer text-[var(--text-primary)]"
             >
               LET&apos;S TALK
             </button>
 
             <button
               onClick={() => setIsMenuOpen(true)}
-              className="flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[var(--text-primary)] text-[var(--bg-primary)] hover:bg-[var(--accent)] transition-colors duration-200 cursor-pointer text-xs font-mono tracking-widest uppercase font-semibold"
+              className="flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[var(--accent)] text-[var(--accent-contrast)] hover:opacity-90 shadow-[0_0_12px_rgba(90,255,21,0.25)] transition-all duration-200 cursor-pointer text-xs font-mono tracking-widest uppercase font-bold"
               aria-expanded={isMenuOpen}
               aria-label="Open Navigation Menu"
             >

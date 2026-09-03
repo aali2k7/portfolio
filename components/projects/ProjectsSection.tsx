@@ -18,7 +18,7 @@ export function ProjectsSection() {
       const trackWidth = horizontalTrackRef.current.scrollWidth;
       const viewportWidth = window.innerWidth;
       // Calculate total translation needed to display the last project card comfortably
-      const totalDistance = Math.max(0, trackWidth - viewportWidth + (viewportWidth > 768 ? 120 : 40));
+      const totalDistance = Math.max(0, trackWidth - viewportWidth + (viewportWidth > 768 ? 140 : 40));
       setMaxTranslateX(totalDistance);
     };
 
@@ -53,26 +53,19 @@ export function ProjectsSection() {
   }, []);
 
   // ---------------------------------------------------------------------------
-  // CHOREOGRAPHY TIMELINE (0.0 -> 1.0)
+  // HORIZONTAL CHOREOGRAPHY TIMELINE (0.0 -> 1.0)
   // ---------------------------------------------------------------------------
 
-  // Phase 1: Philosophy Launchpad -> Rupture & Slide Left (0.0 -> 0.22)
-  // Statement stays anchored initially (0.0 -> 0.06), then slides left (0.06 -> 0.22)
-  const statementExitProgress = Math.max(0, Math.min(1, (scrollProgress - 0.04) / 0.18));
-  const statementTranslateX = -statementExitProgress * 110; // 0vw -> -110vw (exits left)
-  const statementOpacity = Math.max(0, 1 - statementExitProgress * 1.4);
-  const statementScale = 1 + statementExitProgress * 0.15;
-
-  // Phase 2: Projects Canvas Enters DIRECTLY from the RIGHT (0.05 -> 0.24)
+  // Phase 1: Projects Canvas Enters DIRECTLY from the FAR RIGHT (0.0 -> 0.16)
   // Strictly horizontal (x: 100vw -> 0vw, y: 0)
-  const projectsEntranceProgress = Math.max(0, Math.min(1, (scrollProgress - 0.05) / 0.19));
-  // Smooth cubic ease-out for horizontal arrival
-  const easedProjectsEntrance = 1 - Math.pow(1 - projectsEntranceProgress, 3);
-  const projectsCanvasTranslateX = (1 - easedProjectsEntrance) * 100; // +100vw -> 0vw
+  const entranceProgress = Math.max(0, Math.min(1, scrollProgress / 0.16));
+  // Cubic ease-out for immediate horizontal glide
+  const easedEntrance = 1 - Math.pow(1 - entranceProgress, 3);
+  const canvasTranslateX = (1 - easedEntrance) * 100; // +100vw -> 0vw
 
-  // Phase 3: Dedicated Horizontal Project Gallery Scrub (0.24 -> 0.90)
-  // Begins ONLY after the projects canvas has fully settled at x: 0vw
-  const galleryProgress = Math.max(0, Math.min(1, (scrollProgress - 0.24) / 0.66));
+  // Phase 2: Horizontal Project Gallery Scrub (0.16 -> 0.94)
+  // Begins ONLY once canvas has fully arrived at 0vw
+  const galleryProgress = Math.max(0, Math.min(1, (scrollProgress - 0.16) / 0.78));
   const currentTranslateX = galleryProgress * maxTranslateX;
 
   // Active Project Indicator (1, 2, or 3)
@@ -86,67 +79,36 @@ export function ProjectsSection() {
     <section
       id="projects"
       ref={sectionRef}
-      className="relative w-full h-[450vh] bg-[var(--bg-primary)] border-t border-[var(--border-subtle)] select-none overflow-x-clip"
+      className="relative w-full h-[400vh] bg-[var(--bg-primary)] select-none overflow-x-clip border-t border-[var(--border-subtle)]"
     >
-      {/* Pinned Sticky Viewport (100vh / 100dvh) */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between py-8 md:py-12 px-4 sm:px-6 md:px-12 lg:px-16 max-w-[1600px] mx-auto">
+      {/* Sticky Viewport Container */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between py-6 sm:py-8 md:py-10 px-4 sm:px-6 md:px-12 lg:px-16 max-w-[1600px] mx-auto">
         
+        {/* Subtle background atmosphere in Projects realm */}
+        <div className="absolute inset-0 pointer-events-none ambient-glow-purple opacity-30 z-0" />
+        <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-96 h-96 ambient-glow-neon opacity-20 pointer-events-none z-0" />
+
         {/* ========================================================================= */}
-        {/* LAYER 1: PHILOSOPHY STATEMENT LAUNCHPAD (Anchored, then exits to Left)    */}
+        {/* HORIZONTAL PROJECTS CANVAS (Enters strictly along horizontal axis)        */}
         {/* ========================================================================= */}
         <div
-          className="absolute inset-0 z-10 flex flex-col justify-center items-center px-6 md:px-16 text-center pointer-events-none will-change-transform"
+          className="relative z-10 w-full h-full flex flex-col justify-between will-change-transform"
           style={{
-            transform: `translate3d(${statementTranslateX}vw, 0, 0) scale(${statementScale})`,
-            opacity: statementOpacity,
+            transform: `translate3d(${canvasTranslateX}vw, 0, 0)`,
           }}
         >
-          <div className="max-w-5xl mx-auto flex flex-col items-center">
-            {/* Launchpad Eyebrow */}
-            <div className="flex items-center gap-2 mb-6">
-              <span className="w-2 h-2 rounded-full bg-[var(--accent)] animate-pulse" />
-              <span className="font-mono text-xs uppercase tracking-widest text-[var(--text-muted)] font-semibold">
-                02 — THE PHILOSOPHY / CATALYST
-              </span>
-            </div>
-
-            {/* Massive Statement with Accent Highlight */}
-            <h2 className="font-display text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold uppercase tracking-tight text-[var(--text-primary)] leading-[0.92]">
-              THE BEST SOLUTIONS
-              <span className="block text-[var(--text-primary)] mt-2">DON&apos;T START WITH CODE.</span>
-              <span className="block text-[var(--accent)] mt-3">
-                THEY START WITH A QUESTION.
-              </span>
-            </h2>
-
-            <div className="mt-8 flex items-center gap-2 font-mono text-xs text-[var(--text-muted)] tracking-widest uppercase">
-              <Sparkles className="w-3.5 h-3.5 text-[var(--accent)]" />
-              <span>SCROLL TO UNLEASH SELECTED WORK →</span>
-            </div>
-          </div>
-        </div>
-
-        {/* ========================================================================= */}
-        {/* LAYER 2: SELECTED WORK / PROJECTS CANVAS (Enters DIRECTLY from RIGHT)     */}
-        {/* ========================================================================= */}
-        <div
-          className="relative z-20 w-full h-full flex flex-col justify-between will-change-transform"
-          style={{
-            transform: `translate3d(${projectsCanvasTranslateX}vw, 0, 0)`,
-          }}
-        >
-          {/* Top Section Header & Scrub Status Bar (Grid-aligned) */}
+          {/* Top Section Header & Status Tracker */}
           <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--border-subtle)]">
             <div className="flex items-center gap-3">
               <span className="font-mono text-xs md:text-sm text-[var(--accent)] font-bold">
-                03
+                02
               </span>
               <span className="font-mono text-xs md:text-sm uppercase tracking-widest text-[var(--text-muted)] font-semibold">
-                SELECTED WORK / PROJECTS
+                SELECTED WORK / FLAGSHIP SYSTEMS
               </span>
               <span className="hidden sm:inline-block text-[var(--border-subtle)]">•</span>
               <span className="hidden sm:inline-block font-mono text-xs text-[var(--text-muted)]">
-                PRODUCT &amp; ARCHITECTURE
+                AI &amp; SECURITY ARCHITECTURE
               </span>
             </div>
 
@@ -156,7 +118,7 @@ export function ProjectsSection() {
               </span>
               <span>•</span>
               <div className="flex items-center gap-1.5 text-[var(--accent)] font-semibold">
-                <span>SCROLL TO NAVIGATE</span>
+                <span>SCROLL HORIZONTALLY</span>
                 <ArrowRight className="w-3.5 h-3.5 animate-pulse" />
               </div>
             </div>
@@ -169,13 +131,13 @@ export function ProjectsSection() {
               className="flex flex-nowrap items-center gap-8 md:gap-12 will-change-transform"
               style={{
                 transform: `translate3d(-${currentTranslateX}px, 0, 0)`,
-                transition: "transform 0.05s ease-out",
+                transition: "transform 0.04s ease-out",
               }}
             >
               {projects.map((project, index) => (
                 <div
                   key={project.id}
-                  className="shrink-0 w-[88vw] sm:w-[84vw] md:w-[80vw] lg:w-[76vw] max-w-[1150px]"
+                  className="shrink-0 w-[88vw] sm:w-[84vw] md:w-[80vw] lg:w-[76vw] max-w-[1180px]"
                 >
                   <ProjectCard project={project} isFlagship={index === 0 || project.featured} />
                 </div>
@@ -185,14 +147,17 @@ export function ProjectsSection() {
 
           {/* Bottom Progress Tracker Bar */}
           <div className="w-full flex items-center justify-between pt-4 border-t border-[var(--border-subtle)] font-mono text-[11px] text-[var(--text-muted)] uppercase tracking-widest">
-            <span>[ 03 — DEDICATED GALLERY ]</span>
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-3 h-3 text-[var(--accent)]" />
+              <span>[ 02 — CINEMATIC GALLERY ]</span>
+            </div>
 
             {/* Visual scrub bar */}
             <div className="hidden sm:flex items-center gap-3">
-              <span>GALLERY EXPLORATION</span>
-              <div className="w-36 h-1.5 bg-[var(--border-subtle)] rounded-full overflow-hidden">
+              <span>EXPLORATION PROGRESS</span>
+              <div className="w-40 h-1.5 bg-[var(--bg-secondary)] rounded-full overflow-hidden border border-[var(--border-subtle)]">
                 <div
-                  className="h-full bg-[var(--accent)] transition-all duration-75"
+                  className="h-full bg-[var(--accent)] shadow-[0_0_10px_var(--accent)] transition-all duration-75"
                   style={{ width: `${Math.round(galleryProgress * 100)}%` }}
                 />
               </div>
@@ -202,7 +167,7 @@ export function ProjectsSection() {
             </div>
 
             <span className="text-[var(--text-secondary)]">
-              {galleryProgress >= 0.98 ? "COMPLETED ↓ SCROLL FOR EXPERIENCE" : "CONTINUE SCROLLING"}
+              {galleryProgress >= 0.98 ? "COMPLETED ↓ SCROLL FOR BIOGRAPHY" : "CONTINUE SCROLLING"}
             </span>
           </div>
         </div>

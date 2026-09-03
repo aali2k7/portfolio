@@ -13,9 +13,9 @@ interface FullscreenMenuProps {
 }
 
 const navLinks = [
-  { number: "01", label: "HOME", targetId: "hero" },
-  { number: "02", label: "ABOUT & PHILOSOPHY", targetId: "about" },
-  { number: "03", label: "SELECTED WORK", targetId: "projects" },
+  { number: "01", label: "HOME / IDENTITY", targetId: "hero" },
+  { number: "02", label: "SELECTED WORK", targetId: "projects" },
+  { number: "03", label: "ABOUT & PHILOSOPHY", targetId: "about" },
   { number: "04", label: "EXPERIENCE", targetId: "experience" },
   { number: "05", label: "RESEARCH", targetId: "research" },
   { number: "06", label: "TECH STACK", targetId: "stack" },
@@ -58,23 +58,23 @@ export function FullscreenMenu({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-50 flex flex-col justify-between bg-[#0A0A0A] text-[#F4F4F0] p-6 md:p-12 lg:p-16"
+          className="fixed inset-0 z-50 flex flex-col justify-between bg-[#07060B] text-[#F5F5F7] p-6 md:p-12 lg:p-16"
           role="dialog"
           aria-modal="true"
           aria-label="Navigation Menu"
         >
           {/* Top Bar inside Menu */}
-          <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.12)] pb-6">
+          <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.1)] pb-6">
             <div className="flex items-center gap-3">
-              <span className="w-2.5 h-2.5 rounded-full bg-[var(--accent)] animate-pulse" />
-              <span className="font-mono text-xs uppercase tracking-widest text-[#A0A0A0]">
+              <span className="w-2.5 h-2.5 rounded-full bg-[var(--accent)] shadow-[0_0_10px_var(--accent)] animate-pulse" />
+              <span className="font-mono text-xs uppercase tracking-widest text-[#A0A0B0]">
                 {siteConfig.name} — Directory
               </span>
             </div>
 
             <button
               onClick={onClose}
-              className="group flex items-center gap-2 px-4 py-2 rounded-full border border-[rgba(255,255,255,0.2)] hover:border-white transition-colors duration-200 text-sm font-mono tracking-wider cursor-pointer"
+              className="group flex items-center gap-2 px-4 py-2 rounded-full border border-[rgba(255,255,255,0.15)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors duration-200 text-sm font-mono tracking-wider cursor-pointer"
               aria-label="Close menu"
             >
               <span>CLOSE</span>
@@ -94,7 +94,7 @@ export function FullscreenMenu({
                     animate={{ opacity: 1, y: 0 }}
                     transition={{
                       duration: 0.4,
-                      delay: 0.05 * idx,
+                      delay: 0.04 * idx,
                       ease: [0.16, 1, 0.3, 1],
                     }}
                   >
@@ -105,14 +105,14 @@ export function FullscreenMenu({
                       }}
                       className="group flex items-baseline gap-4 md:gap-8 text-left w-full cursor-pointer py-1"
                     >
-                      <span className="font-mono text-xs md:text-sm text-[#707070] group-hover:text-[var(--accent)] transition-colors">
+                      <span className="font-mono text-xs md:text-sm text-[#66667B] group-hover:text-[var(--accent)] transition-colors">
                         {link.number}
                       </span>
                       <span
                         className={`font-display text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight transition-all duration-300 ${
                           isActive
                             ? "text-[var(--accent)] translate-x-3"
-                            : "text-[#E8E8E8] group-hover:text-white group-hover:translate-x-3"
+                            : "text-[#E5E5EA] group-hover:text-[var(--accent)] group-hover:translate-x-3"
                         }`}
                       >
                         {link.label}
@@ -126,7 +126,7 @@ export function FullscreenMenu({
           </nav>
 
           {/* Bottom Meta & Socials */}
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between pt-6 border-t border-[rgba(255,255,255,0.12)] text-xs font-mono text-[#808080] gap-4">
+          <div className="flex flex-col md:flex-row items-start md:items-center justify-between pt-6 border-t border-[rgba(255,255,255,0.1)] text-xs font-mono text-[#808095] gap-4">
             <div>
               <span>BASED IN {siteConfig.location.city.toUpperCase()}, {siteConfig.location.country.toUpperCase()}</span>
             </div>
@@ -135,7 +135,7 @@ export function FullscreenMenu({
                 href={siteConfig.socials.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-white transition-colors"
+                className="hover:text-[var(--accent)] transition-colors"
               >
                 GITHUB
               </a>
@@ -143,7 +143,7 @@ export function FullscreenMenu({
                 href={siteConfig.socials.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-white transition-colors"
+                className="hover:text-[var(--accent)] transition-colors"
               >
                 LINKEDIN
               </a>
@@ -151,7 +151,7 @@ export function FullscreenMenu({
                 href={siteConfig.socials.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-white transition-colors"
+                className="hover:text-[var(--accent)] transition-colors"
               >
                 INSTAGRAM
               </a>

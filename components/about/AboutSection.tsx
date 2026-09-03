@@ -13,7 +13,7 @@ export function AboutSection() {
       <div className="flex items-center justify-between mb-12 md:mb-16">
         <div className="flex items-center gap-3">
           <span className="font-mono text-xs md:text-sm text-[var(--accent)] font-bold">
-            02
+            03
           </span>
           <span className="font-mono text-xs md:text-sm uppercase tracking-widest text-[var(--text-muted)] font-semibold">
             ABOUT / PHILOSOPHY
@@ -41,7 +41,7 @@ export function AboutSection() {
         </div>
 
         {/* Right Column: Structured Credentials & Fact Sheet */}
-        <div className="lg:col-span-5 flex flex-col gap-6 bg-[var(--bg-secondary)] p-7 md:p-9 rounded-3xl border border-[var(--border-subtle)] shadow-sm">
+        <div className="lg:col-span-5 flex flex-col gap-6 bg-[var(--bg-card)] p-7 md:p-9 rounded-3xl border border-[var(--border-subtle)] shadow-xl">
           <div className="flex items-center gap-2 pb-4 border-b border-[var(--border-subtle)]">
             <Sparkles className="w-4 h-4 text-[var(--accent)]" />
             <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--text-primary)] font-bold">
@@ -95,8 +95,8 @@ export function AboutSection() {
 
       {/* Bottom Transition Lead-in Cue */}
       <div className="mt-16 md:mt-20 pt-6 border-t border-[var(--border-subtle)] flex items-center justify-between font-mono text-xs text-[var(--text-muted)] tracking-widest uppercase">
-        <span>[ 02 — THE CORE PRINCIPLE ]</span>
-        <span className="text-[var(--accent)] font-semibold">SCROLL TO PHILOSOPHY CATALYST ↓</span>
+        <span>[ 03 — BIOGRAPHY &amp; PHILOSOPHY ]</span>
+        <span className="text-[var(--accent)] font-semibold">SCROLL TO EXPERIENCE &amp; LEADERSHIP ↓</span>
       </div>
     </section>
   );

@@ -1,159 +1,100 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "motion/react";
-import { siteConfig } from "@/data/siteConfig";
 
 interface SignatureRevealProps {
   progress?: number; // 0 (hidden) to 1 (fully drawn & focused)
   isMassive?: boolean;
   className?: string;
+  glow?: boolean;
 }
 
 export function SignatureReveal({
   progress = 1,
   isMassive = false,
   className = "",
+  glow = true,
 }: SignatureRevealProps) {
   // Clamp progress between 0 and 1
   const p = Math.max(0, Math.min(1, progress));
 
-  if (isMassive) {
-    return (
-      <div className={`relative w-full max-w-5xl mx-auto flex items-center justify-center ${className}`}>
-        <svg
-          viewBox="0 0 600 240"
-          fill="none"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="w-full h-auto text-[var(--text-primary)] overflow-visible drop-shadow-sm"
-        >
-          {/* Main Name Signature Stroke 1 */}
-          <motion.path
-            d="M 60 180 C 75 140, 110 50, 135 60 C 150 65, 125 170, 115 190 C 130 170, 180 130, 200 135 C 215 138, 195 185, 185 190 C 195 175, 230 145, 250 145 C 265 145, 250 185, 245 190"
-            strokeWidth="6.5"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: p >= 0.2 ? 1 : p * 5 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          />
-
-          {/* Cross stroke */}
-          <motion.path
-            d="M 85 130 Q 155 125 210 120"
-            strokeWidth="5"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: p >= 0.35 ? 1 : 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          />
-
-          {/* Rahman Stroke 2 */}
-          <motion.path
-            d="M 280 185 C 290 140, 310 90, 330 95 C 345 100, 325 180, 320 190 C 335 160, 380 120, 420 125 C 450 130, 430 190, 410 195 C 440 160, 510 110, 560 100"
-            strokeWidth="6.5"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: p >= 0.5 ? 1 : 0 }}
-            transition={{ duration: 1.0, ease: "easeOut" }}
-          />
-
-          {/* Secondary flourish */}
-          <motion.path
-            d="M 380 145 Q 460 140 540 135"
-            strokeWidth="4.5"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: p >= 0.65 ? 1 : 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          />
-
-          {/* Accent Underline Flourish */}
-          <motion.path
-            d="M 80 215 C 200 210, 420 220, 570 195 C 520 225, 340 235, 120 230"
-            stroke="var(--accent)"
-            strokeWidth="5"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: p >= 0.75 ? 1 : 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          />
-        </svg>
-      </div>
-    );
-  }
+  // Mask clip width based on progress (reveals from left to right)
+  const clipWidth = Math.min(100, Math.max(0, p * 115));
 
   return (
-    <div className={`relative w-full max-w-2xl mx-auto flex flex-col items-center justify-center p-4 ${className}`}>
-      {/* Editorial Declaration Header */}
-      <div className="flex items-center gap-2 mb-3">
-        <span className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
-        <span className="font-mono text-[10px] md:text-xs uppercase tracking-widest text-[var(--text-muted)]">
-          IDENTITY / SIGNATURE
-        </span>
-      </div>
+    <div
+      className={`relative select-none pointer-events-none ${className}`}
+      style={{
+        transform: "rotate(-8.5deg)",
+        transformOrigin: "center center",
+      }}
+    >
+      {/* Glow Aura Layer */}
+      {glow && (
+        <div
+          className="absolute inset-0 -m-8 pointer-events-none transition-opacity duration-300"
+          style={{
+            opacity: Math.min(0.8, p * 0.9),
+            filter: "blur(24px)",
+            background:
+              "radial-gradient(ellipse at center, rgba(90, 255, 21, 0.35) 0%, rgba(90, 255, 21, 0.1) 50%, transparent 80%)",
+          }}
+        />
+      )}
 
-      {/* SVG Signature Canvas */}
-      <div className="w-full aspect-[600/220] relative flex items-center justify-center">
-        <svg
-          viewBox="0 0 600 240"
-          fill="none"
-          stroke="currentColor"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          className="w-full h-full text-[var(--text-primary)]"
+      {/* SVG Stroke Path Animation + Authentic Signature Overlay */}
+      <div
+        className="relative overflow-visible"
+        style={{
+          filter: glow
+            ? "drop-shadow(0 0 14px rgba(90, 255, 21, 0.55)) drop-shadow(0 0 35px rgba(90, 255, 21, 0.25))"
+            : "none",
+        }}
+      >
+        {/* Animated Reveal Container */}
+        <div
+          className="relative transition-all duration-100 ease-out"
+          style={{
+            clipPath: `polygon(0% 0%, ${clipWidth}% 0%, ${clipWidth}% 100%, 0% 100%)`,
+          }}
         >
-          {/* Main Name Signature Stroke 1 */}
-          <motion.path
-            d="M 60 180 C 75 140, 110 50, 135 60 C 150 65, 125 170, 115 190 C 130 170, 180 130, 200 135 C 215 138, 195 185, 185 190 C 195 175, 230 145, 250 145 C 265 145, 250 185, 245 190"
-            strokeWidth="5"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: p >= 0.2 ? 1 : p * 5 }}
-            transition={{ duration: 1.2, ease: "easeInOut" }}
-          />
+          {isMassive ? (
+            <div className="relative w-[75vw] sm:w-[65vw] md:w-[50vw] lg:w-[42vw] max-w-[820px] aspect-[1024/576]">
+              <Image
+                src="/images/signature.png"
+                alt="Aali Rahman Signature"
+                fill
+                priority
+                sizes="(max-width: 768px) 80vw, 820px"
+                className="object-contain object-center will-change-transform"
+              />
+            </div>
+          ) : (
+            <div className="relative w-[50vw] sm:w-[38vw] md:w-[28vw] max-w-[420px] aspect-[1024/576]">
+              <Image
+                src="/images/signature.png"
+                alt="Aali Rahman Signature"
+                fill
+                priority
+                sizes="(max-width: 768px) 50vw, 420px"
+                className="object-contain object-center will-change-transform"
+              />
+            </div>
+          )}
+        </div>
 
-          {/* Cross stroke */}
-          <motion.path
-            d="M 85 130 Q 155 125 210 120"
-            strokeWidth="4"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: p >= 0.4 ? 1 : 0 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
+        {/* Dynamic Pen/Spark Point at reveal edge */}
+        {p > 0.05 && p < 0.96 && (
+          <motion.div
+            className="absolute top-1/2 w-3 h-3 -translate-y-1/2 rounded-full bg-[#5AFF15] shadow-[0_0_12px_#5AFF15,0_0_24px_#5AFF15]"
+            style={{
+              left: `${clipWidth}%`,
+            }}
+            animate={{ scale: [1, 1.4, 1] }}
+            transition={{ repeat: Infinity, duration: 0.8 }}
           />
-
-          {/* Rahman Stroke 2 */}
-          <motion.path
-            d="M 280 185 C 290 140, 310 90, 330 95 C 345 100, 325 180, 320 190 C 335 160, 380 120, 420 125 C 450 130, 430 190, 410 195 C 440 160, 510 110, 560 100"
-            strokeWidth="5"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: p >= 0.6 ? 1 : 0 }}
-            transition={{ duration: 1.4, ease: "easeInOut" }}
-          />
-
-          {/* Secondary flourish */}
-          <motion.path
-            d="M 380 145 Q 460 140 540 135"
-            strokeWidth="3.5"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: p >= 0.75 ? 1 : 0 }}
-            transition={{ duration: 0.8, ease: "easeInOut" }}
-          />
-
-          {/* Accent Underline Flourish */}
-          <motion.path
-            d="M 80 215 C 200 210, 420 220, 570 195 C 520 225, 340 235, 120 230"
-            stroke="var(--accent)"
-            strokeWidth="4"
-            initial={{ pathLength: 0 }}
-            animate={{ pathLength: p >= 0.85 ? 1 : 0 }}
-            transition={{ duration: 1.0, ease: "easeInOut" }}
-          />
-        </svg>
-      </div>
-
-      {/* Signature Caption */}
-      <div className="mt-2 text-center">
-        <p className="font-display font-bold text-sm tracking-tight uppercase text-[var(--text-primary)]">
-          {siteConfig.name}
-        </p>
-        <p className="font-mono text-[11px] text-[var(--text-muted)] tracking-wider">
-          HYDERABAD, IN • 2026
-        </p>
+        )}
       </div>
     </div>
   );
