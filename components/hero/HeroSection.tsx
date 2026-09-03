@@ -5,7 +5,7 @@ import Image from "next/image";
 import { siteConfig } from "@/data/siteConfig";
 import { HeroBackgroundVideo } from "./HeroBackgroundVideo";
 import { SignatureReveal } from "@/components/signature/SignatureReveal";
-import { ArrowDown, Sparkles, MapPin, GraduationCap, Cpu } from "lucide-react";
+import { ArrowDown, Sparkles } from "lucide-react";
 
 export function HeroSection() {
   const trackRef = useRef<HTMLDivElement | null>(null);
@@ -41,21 +41,29 @@ export function HeroSection() {
 
   // STAGE 1 & 2: Scroll-Driven Signature Drawing (0.10 -> 0.54)
   const sigDrawingRaw = Math.max(0, Math.min(1, (scrollProgress - 0.10) / 0.44));
-  // Smooth cubic ease for natural drawing progression
   const sigProgress = Math.pow(sigDrawingRaw, 1.15);
 
   // STAGE 4: Hero Receding into Background Depth (0.58 -> 0.86)
   const heroRecedeProgress = Math.max(0, Math.min(1, (scrollProgress - 0.58) / 0.28));
   const heroScale = 1 - heroRecedeProgress * 0.12; // 1.0 -> 0.88
   const heroTranslateY = heroRecedeProgress * 40; // 0 -> 40px
-  const heroOpacity = Math.max(0.12, 1 - heroRecedeProgress * 0.84); // 1.0 -> 0.16
+  const heroOpacity = Math.max(0.08, 1 - heroRecedeProgress * 0.90); // 1.0 -> 0.10
   const heroBlur = heroRecedeProgress * 6; // 0 -> 6px
-  const scrimOpacity = Math.min(0.9, heroRecedeProgress * 1.1); // 0 -> 0.90
+  const scrimOpacity = Math.min(0.94, heroRecedeProgress * 1.15); // 0 -> 0.94
 
-  // STAGE 5: Personal Details Emerge in Foreground (0.64 -> 0.96)
-  const detailsProgress = Math.max(0, Math.min(1, (scrollProgress - 0.64) / 0.30));
-  const detailsOpacity = Math.min(1, detailsProgress * 1.3);
-  const detailsTranslateY = (1 - Math.pow(detailsProgress, 0.75)) * 60; // 60px -> 0px
+  // STAGE 5: Chapter 01 — The Human Behind the Machine (Staggered Interpolation)
+  // 0.62 -> 0.96
+  const chapterProgress = Math.max(0, Math.min(1, (scrollProgress - 0.62) / 0.32));
+  
+  // Staggered reveals for distinct storytelling layers
+  const headlineOpacity = Math.min(1, Math.max(0, (chapterProgress - 0.05) / 0.35));
+  const headlineTranslateY = (1 - Math.pow(Math.min(1, Math.max(0, (chapterProgress - 0.05) / 0.35)), 0.75)) * 25;
+
+  const narrativeOpacity = Math.min(1, Math.max(0, (chapterProgress - 0.18) / 0.40));
+  const narrativeTranslateY = (1 - Math.pow(Math.min(1, Math.max(0, (chapterProgress - 0.18) / 0.40)), 0.75)) * 20;
+
+  const metadataOpacity = Math.min(1, Math.max(0, (chapterProgress - 0.28) / 0.45));
+  const metadataTranslateY = (1 - Math.pow(Math.min(1, Math.max(0, (chapterProgress - 0.28) / 0.45)), 0.75)) * 20;
 
   // Top Eyebrow Bar Fade (0.50 -> 0.70)
   const topEyebrowOpacity = Math.max(0, 1 - (scrollProgress - 0.50) / 0.20);
@@ -178,7 +186,7 @@ export function HeroSection() {
             <div className="absolute bottom-0 left-0 right-0 h-36 bg-gradient-to-t from-[var(--bg-primary)] via-[rgba(7,6,11,0.85)] to-transparent pointer-events-none" />
 
             {/* Signature Overlay (Tied directly to scroll progress) */}
-            <div className="absolute inset-0 flex items-center justify-center -mt-16 sm:-mt-20 md:-mt-28 pointer-events-none">
+            <div className="absolute inset-0 flex items-center justify-center -mt-12 sm:-mt-16 md:-mt-20 pointer-events-none overflow-visible">
               <SignatureReveal
                 progress={sigProgress}
                 isMassive
@@ -190,115 +198,171 @@ export function HeroSection() {
         </div>
 
         {/* ========================================================================= */}
-        {/* LAYER 4: ATMOSPHERIC DIMMING SCRIM (Fades in over receding hero)          */}
+        {/* LAYER 4: ATMOSPHERIC DIMMING SCRIM (Ensures 100% Foreground Contrast)     */}
         {/* ========================================================================= */}
         <div
-          className="absolute inset-0 z-25 pointer-events-none bg-gradient-to-b from-transparent via-[rgba(7,6,11,0.6)] to-[var(--bg-primary)]"
+          className="absolute inset-0 z-25 pointer-events-none bg-gradient-to-b from-[rgba(7,6,11,0.6)] via-[rgba(7,6,11,0.92)] to-[var(--bg-primary)]"
           style={{
             opacity: scrimOpacity,
           }}
         />
 
         {/* ========================================================================= */}
-        {/* LAYER 5: FOREGROUND PERSONAL DETAILS & SPECIFICATIONS (Stage 5 Emergence)  */}
+        {/* LAYER 5: CHAPTER 01 — THE HUMAN BEHIND THE MACHINE                        */}
+        {/* Spacious, Editorial, Personal Narrative with Zero Boxed UI Clutter        */}
         {/* ========================================================================= */}
         <div
-          className="absolute inset-0 z-30 flex flex-col justify-center items-center px-4 sm:px-6 md:px-12 lg:px-16 max-w-7xl mx-auto pointer-events-none"
+          className="absolute inset-0 z-30 flex flex-col justify-center items-center px-6 sm:px-10 md:px-14 lg:px-16 max-w-7xl mx-auto pt-20 pb-20 pointer-events-none"
           style={{
-            opacity: detailsOpacity,
-            transform: `translate3d(0, ${detailsTranslateY}px, 0)`,
-            pointerEvents: detailsProgress > 0.5 ? "auto" : "none",
+            pointerEvents: chapterProgress > 0.4 ? "auto" : "none",
           }}
         >
-          <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center my-auto py-8">
+          <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-center my-auto">
             
-            {/* Left Column: Narrative Storytelling & Problem-First Philosophy */}
-            <div className="lg:col-span-7 flex flex-col gap-6">
-              <div className="flex items-center gap-3">
-                <span className="w-2.5 h-2.5 rounded-full bg-[var(--accent)] shadow-[0_0_8px_var(--accent)] animate-pulse" />
-                <span className="font-mono text-xs uppercase tracking-widest text-[var(--accent)] font-bold">
-                  CHAPTER 01 — THE HUMAN ARCHITECT
-                </span>
+            {/* LEFT SIDE: PRIMARY EDITORIAL STORY (7 cols) */}
+            <div className="lg:col-span-7 flex flex-col space-y-4 sm:space-y-5">
+              
+              {/* Chapter Eyebrow Tag + Evolution Arc */}
+              <div
+                className="flex flex-wrap items-center justify-between gap-3 transition-transform will-change-transform"
+                style={{
+                  opacity: headlineOpacity,
+                  transform: `translate3d(0, ${headlineTranslateY * 0.5}px, 0)`,
+                }}
+              >
+                <div className="flex items-center gap-2.5">
+                  <span className="w-2 h-2 rounded-full bg-[var(--accent)] shadow-[0_0_8px_var(--accent)] animate-pulse" />
+                  <span className="font-mono text-xs uppercase tracking-widest text-[var(--accent)] font-semibold">
+                    CHAPTER 01 — THE HUMAN BEHIND THE MACHINE
+                  </span>
+                </div>
+
+                <div className="hidden sm:flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-[#77778A]">
+                  <span className="text-[#D4D4E2]">CURIOSITY</span>
+                  <span className="text-[var(--accent)]">→</span>
+                  <span className="text-[#D4D4E2]">BUILDER</span>
+                  <span className="text-[var(--accent)]">→</span>
+                  <span className="text-[var(--accent)] font-semibold">SYSTEMS</span>
+                </div>
               </div>
 
-              <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold uppercase text-[var(--text-primary)] leading-[0.92] tracking-tight">
-                I DON&apos;T START WITH CODE.
-                <span className="block text-[var(--accent)] mt-2">
-                  I START WITH THE PROBLEM.
-                </span>
-              </h2>
+              {/* Editorial Headline in 2 Clean Lines with Breathing Room */}
+              <div
+                className="transition-transform will-change-transform"
+                style={{
+                  opacity: headlineOpacity,
+                  transform: `translate3d(0, ${headlineTranslateY}px, 0)`,
+                }}
+              >
+                <h2 className="font-display text-3xl sm:text-4xl md:text-5xl lg:text-[3.6rem] font-extrabold uppercase tracking-tight text-[#F5F5F7] leading-[1.02]">
+                  BEHIND EVERY SYSTEM <br className="hidden sm:inline" />
+                  IS A <span className="text-[var(--accent)]">QUESTION.</span>
+                </h2>
+              </div>
 
-              <div className="space-y-4 text-sm sm:text-base md:text-lg text-[var(--text-secondary)] leading-relaxed font-body">
+              {/* Personal Human Narrative */}
+              <div
+                className="space-y-3.5 text-sm sm:text-base md:text-[17px] text-[#A6A6B8] leading-relaxed font-body max-w-xl transition-transform will-change-transform"
+                style={{
+                  opacity: narrativeOpacity,
+                  transform: `translate3d(0, ${narrativeTranslateY}px, 0)`,
+                }}
+              >
                 <p>
-                  I am <strong className="text-[var(--text-primary)] font-semibold">{siteConfig.name}</strong>, a full-stack engineer and product builder driven by understanding the human friction before writing technical architecture.
+                  I&apos;m <strong className="text-[#F5F5F7] font-semibold">{siteConfig.name}</strong> — a developer, builder, and engineering student driven by an insatiable curiosity about how technology works and how ideas become real systems.
                 </p>
                 <p>
-                  Once the problem space is sharp, I engineer fast, resilient, and beautiful digital systems that solve it completely. Whether architecting AI intelligence engines or publishing security research, technology is my precision tool.
+                  For me, engineering is an act of translation. It begins with observing human friction, asking foundational questions, and building with rigor — from intelligent AI architectures and system security research to fluid digital products that feel effortless and alive.
                 </p>
               </div>
 
-              {/* Pillars */}
-              <div className="flex flex-wrap gap-2 pt-2">
-                <span className="font-mono text-xs px-3 py-1 rounded-full bg-[var(--bg-secondary)] text-[var(--text-primary)] border border-[var(--border-subtle)]">
-                  FULL-STACK ARCHITECTURE
-                </span>
-                <span className="font-mono text-xs px-3 py-1 rounded-full bg-[var(--bg-secondary)] text-[var(--text-primary)] border border-[var(--border-subtle)]">
-                  AI &amp; PRODUCT ENGINEERING
-                </span>
-                <span className="font-mono text-xs px-3 py-1 rounded-full bg-[var(--bg-secondary)] text-[var(--text-primary)] border border-[var(--border-subtle)]">
-                  SYSTEM SECURITY RESEARCH
-                </span>
+              {/* Mobile-only Evolution Arc */}
+              <div
+                className="sm:hidden pt-1 flex items-center gap-2 font-mono text-[10px] uppercase tracking-widest text-[#77778A]"
+                style={{ opacity: narrativeOpacity }}
+              >
+                <span className="text-[#D4D4E2]">CURIOSITY</span>
+                <span className="text-[var(--accent)]">→</span>
+                <span className="text-[#D4D4E2]">BUILDER</span>
+                <span className="text-[var(--accent)]">→</span>
+                <span className="text-[var(--accent)] font-semibold">SYSTEMS</span>
               </div>
             </div>
 
-            {/* Right Column: Structured Credentials & Fact Sheet */}
-            <div className="lg:col-span-5 flex flex-col gap-5 bg-[var(--bg-card)]/90 backdrop-blur-md p-6 sm:p-8 rounded-3xl border border-[var(--border-subtle)] shadow-2xl">
-              <div className="flex items-center gap-2 pb-4 border-b border-[var(--border-subtle)]">
-                <Sparkles className="w-4 h-4 text-[var(--accent)]" />
-                <h3 className="font-mono text-xs uppercase tracking-widest text-[var(--text-primary)] font-bold">
-                  PROFILE SPECIFICATIONS
-                </h3>
+            {/* RIGHT SIDE: EDITORIAL IDENTITY SIGNALS (5 cols — NO BOXED CARDS) */}
+            <div
+              className="lg:col-span-5 flex flex-col space-y-3.5 sm:space-y-4 pl-0 lg:pl-8 border-l-0 lg:border-l border-white/[0.08] transition-transform will-change-transform"
+              style={{
+                opacity: metadataOpacity,
+                transform: `translate3d(0, ${metadataTranslateY}px, 0)`,
+              }}
+            >
+              {/* 01 / ORIGIN */}
+              <div className="space-y-0.5">
+                <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-widest text-[#66667A] block font-semibold">
+                  01 / ORIGIN
+                </span>
+                <p className="font-heading font-medium text-base sm:text-lg text-[#EDEDF2]">
+                  {siteConfig.location.city}, {siteConfig.location.country}
+                </p>
+                <p className="font-mono text-[11px] text-[#808095]">
+                  Operating globally across digital environments
+                </p>
               </div>
 
-              <div className="space-y-4 text-sm font-body">
-                {/* Identity */}
-                <div className="flex items-start gap-3">
-                  <Cpu className="w-4 h-4 text-[var(--accent)] mt-1 shrink-0" />
-                  <div>
-                    <p className="font-mono text-xs text-[var(--text-muted)] uppercase">Role</p>
-                    <p className="font-heading font-semibold text-[var(--text-primary)] text-sm sm:text-base">
-                      Full-Stack Developer • Product Builder • Security Researcher
-                    </p>
-                  </div>
-                </div>
+              {/* Hairline Divider */}
+              <div className="h-px w-full bg-white/[0.08]" />
 
-                {/* Location */}
-                <div className="flex items-start gap-3">
-                  <MapPin className="w-4 h-4 text-[var(--accent)] mt-1 shrink-0" />
-                  <div>
-                    <p className="font-mono text-xs text-[var(--text-muted)] uppercase">Location</p>
-                    <p className="font-heading font-semibold text-[var(--text-primary)] text-sm sm:text-base">
-                      {siteConfig.location.city}, {siteConfig.location.country}
-                    </p>
-                  </div>
-                </div>
+              {/* 02 / CURRENT FOCUS */}
+              <div className="space-y-0.5">
+                <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-widest text-[#66667A] block font-semibold">
+                  02 / CURRENT FOCUS
+                </span>
+                <p className="font-heading font-medium text-sm sm:text-base text-[#EDEDF2] leading-snug">
+                  Software Architecture • AI Systems • Product Engineering
+                </p>
+                <p className="font-mono text-[11px] text-[#808095]">
+                  Translating ambiguous problems into fast, resilient software
+                </p>
+              </div>
 
-                {/* Education */}
-                <div className="flex items-start gap-3">
-                  <GraduationCap className="w-4 h-4 text-[var(--accent)] mt-1 shrink-0" />
-                  <div>
-                    <p className="font-mono text-xs text-[var(--text-muted)] uppercase">Education</p>
-                    <p className="font-heading font-semibold text-[var(--text-primary)] text-sm sm:text-base">
-                      {siteConfig.education.institution}
-                    </p>
-                    <p className="text-xs text-[var(--text-secondary)] mt-0.5">
-                      {siteConfig.education.degree} ({siteConfig.education.specialization})
-                    </p>
-                    <p className="font-mono text-xs text-[var(--accent)] mt-0.5 font-bold">
-                      {siteConfig.education.period}
-                    </p>
-                  </div>
+              {/* Hairline Divider */}
+              <div className="h-px w-full bg-white/[0.08]" />
+
+              {/* 03 / EDUCATION */}
+              <div className="space-y-0.5">
+                <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-widest text-[#66667A] block font-semibold">
+                  03 / EDUCATION
+                </span>
+                <p className="font-heading font-medium text-sm sm:text-base text-[#EDEDF2] leading-snug">
+                  {siteConfig.education.degree}
+                </p>
+                <p className="text-xs sm:text-sm text-[#A6A6B8]">
+                  {siteConfig.education.specialization}
+                </p>
+                <div className="flex items-center gap-2 pt-0.5 font-mono text-[11px]">
+                  <span className="text-[var(--accent)] font-semibold">
+                    {siteConfig.education.institution}
+                  </span>
+                  <span className="text-[#555566]">•</span>
+                  <span className="text-[#808095]">{siteConfig.education.period}</span>
                 </div>
+              </div>
+
+              {/* Hairline Divider */}
+              <div className="h-px w-full bg-white/[0.08]" />
+
+              {/* 04 / OPERATING PRINCIPLE */}
+              <div className="space-y-0.5">
+                <span className="font-mono text-[10px] sm:text-[11px] uppercase tracking-widest text-[#66667A] block font-semibold">
+                  04 / OPERATING PRINCIPLE
+                </span>
+                <p className="font-heading font-medium text-sm sm:text-base text-[var(--accent)]">
+                  Curiosity → Experimentation → Execution
+                </p>
+                <p className="font-mono text-[11px] text-[#808095]">
+                  Observe first, architect cleanly, refine through human feedback
+                </p>
               </div>
             </div>
 
@@ -336,13 +400,13 @@ export function HeroSection() {
                   ? "[ STAGE 01 — SIGN THE SCREEN ]"
                   : scrollProgress < 0.85
                   ? "[ STAGE 02 — HERO RECEDING ]"
-                  : "[ STAGE 03 — PERSONAL PROFILE ]"}
+                  : "[ CHAPTER 01 — THE HUMAN BEHIND THE MACHINE ]"}
               </span>
               <span className="hidden sm:inline text-xs text-[var(--text-muted)]">
                 {scrollProgress < 0.55
                   ? "SCROLL TO DRAW SIGNATURE"
                   : scrollProgress < 0.85
-                  ? "SCROLL FOR BIOGRAPHY & SPECIFICATIONS"
+                  ? "SCROLL FOR PERSONAL STORY"
                   : "CONTINUE SCROLLING FOR SELECTED WORK"}
               </span>
             </div>
