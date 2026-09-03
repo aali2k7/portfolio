@@ -13,14 +13,13 @@ interface FullscreenMenuProps {
 }
 
 const navLinks = [
-  { number: "01", label: "HOME / IDENTITY", targetId: "hero" },
+  { number: "01", label: "HOME & PHILOSOPHY", targetId: "hero" },
   { number: "02", label: "SELECTED WORK", targetId: "projects" },
-  { number: "03", label: "ABOUT & PHILOSOPHY", targetId: "about" },
-  { number: "04", label: "EXPERIENCE", targetId: "experience" },
-  { number: "05", label: "RESEARCH", targetId: "research" },
-  { number: "06", label: "TECH STACK", targetId: "stack" },
-  { number: "07", label: "BEYOND CODE", targetId: "personal" },
-  { number: "08", label: "CONTACT", targetId: "contact" },
+  { number: "03", label: "EXPERIENCE", targetId: "experience" },
+  { number: "04", label: "RESEARCH", targetId: "research" },
+  { number: "05", label: "TECH STACK", targetId: "stack" },
+  { number: "06", label: "BEYOND CODE", targetId: "personal" },
+  { number: "07", label: "CONTACT", targetId: "contact" },
 ];
 
 export function FullscreenMenu({
