@@ -1,0 +1,23 @@
+
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 576" width="1024" height="576" fill="none">
+  <g stroke="#5AFF15" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 1. Outer Swooping Loop -->
+    <path d="M 158 415 C 130 330, 260 225, 450 165 C 600 115, 730 120, 755 175 C 775 230, 720 310, 600 365 C 480 420, 320 450, 165 447 C 145 447, 140 435, 158 415 Z" 
+          stroke-width="7" />
+          
+    <!-- 2. Capital 'A' Letterform -->
+    <path d="M 342 480 L 339 164 L 365 480" 
+          stroke-width="8" />
+    <path d="M 270 395 Q 360 380 440 370" 
+          stroke-width="6" />
+          
+    <!-- 3. Cursive 'ali' Sequence -->
+    <path d="M 375 410 Q 410 335 445 370 Q 475 320 518 196 L 522 365 Q 545 365 570 370" 
+          stroke-width="7" />
+    <circle cx="560" cy="310" r="4" fill="#5AFF15" stroke="none" />
+    
+    <!-- 4. Flourish Underline -->
+    <path d="M 560 395 C 700 370, 850 360, 1024 345" 
+          stroke-width="6.5" />
+  </g>
+</svg>
