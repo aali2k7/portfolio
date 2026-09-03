@@ -1,177 +1,209 @@
 "use client";
 
-import { useRef, useEffect, useState, useMemo } from "react";
-import { projects } from "@/data/projects";
-import { ProjectCard } from "./ProjectCard";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ProjectChapter, ProjectChapterData } from "./ProjectChapter";
+import { Sparkles, Terminal } from "lucide-react";
+
+const projectChapters: ProjectChapterData[] = [
+  {
+    id: "priora",
+    number: "01",
+    name: "PRIORA",
+    thesisLead: "EMAIL, RETHOUGHT.",
+    thesisSub: "AI-POWERED INTELLIGENCE FOR OVERLOADED INBOXES.",
+    status: "ACTIVE DEVELOPMENT",
+    image: "/images/priora-preview.jpg",
+    problemTitle: "IMPORTANT WORK GETS BURIED IN NOISE.",
+    problemDescription:
+      "Modern inboxes are built for volume, not human clarity. Critical executive decisions, contract deadlines, and urgent action items get swallowed in hundred-message threads, creating chronic cognitive fatigue.",
+    responseTitle: "PRIORA FINDS WHAT ACTUALLY MATTERS.",
+    responseDescription:
+      "A proactive intelligence layer that autonomously parses conversation threads, extracts prioritized action items with zero human effort, and prepares situational response drafts before you even open your inbox.",
+    trinityPillars: ["UNDERSTAND", "PRIORITIZE", "ACT"],
+    capabilities: [
+      {
+        num: "01",
+        title: "UNDERSTAND",
+        description:
+          "Synthesizes winding, multi-participant threads into structured executive digests in sub-second inference time.",
+      },
+      {
+        num: "02",
+        title: "EXTRACT",
+        description:
+          "Automatically detects deadlines, financial commitments, and assigned deliverables, linking directly with calendar workflows.",
+      },
+      {
+        num: "03",
+        title: "RESPOND",
+        description:
+          "Generates high-precision, context-aware drafts calibrated to your authentic voice while preserving human approval.",
+      },
+    ],
+    architecture: [
+      { tech: "NEXT.JS 16", role: "Product Interface & Real-Time Client" },
+      { tech: "TYPESCRIPT", role: "Strict Type Safety & Contract Integrity" },
+      { tech: "FASTAPI & PYTHON", role: "High-Throughput Asynchronous Backend" },
+      { tech: "POSTGRESQL", role: "Relational Message Graph & State Storage" },
+      { tech: "OPENAI / GEMINI", role: "Contextual Semantic Reasoning Engine" },
+      { tech: "ZERO-RETENTION ARCHITECTURE", role: "Ephemeral Enterprise Privacy Layer" },
+    ],
+    liveUrl: "https://priora.app",
+    githubUrl: "https://github.com/aali2k7/priora",
+    environmentalBg: "bg-[#0C111C]",
+  },
+  {
+    id: "cypherguard",
+    number: "02",
+    name: "CYPHERGUARD",
+    thesisLead: "SECURITY, VERIFIED.",
+    thesisSub: "AUTOMATED CRYPTOGRAPHIC SCANNER & JAVA BYTECODE ANALYZER.",
+    status: "ACTIVE DEVELOPMENT",
+    image: "/images/project-cypherguard.jpg",
+    problemTitle: "CRYPTOGRAPHIC FLAWS LURK IN COMPILED BINARIES.",
+    problemDescription:
+      "Deprecated ciphers (DES, ECB mode), hardcoded initialization vectors, and unsafe deserialization patterns frequently slip through code reviews, hiding silently inside compiled enterprise dependencies.",
+    responseTitle: "STATIC BYTECODE DECOMPILATION & VULNERABILITY AUDITING.",
+    responseDescription:
+      "Built directly from published Java cryptographic research, CypherGuard performs deep static analysis on raw compiled bytecode, instantly flagging NIST-deprecated primitives and dangerous implementation flaws.",
+    trinityPillars: ["DECOMPILE", "AUDIT", "HARDEN"],
+    capabilities: [
+      {
+        num: "01",
+        title: "BYTECODE DECOMPILATION",
+        description:
+          "Direct static inspection of compiled .class and .jar binaries without requiring source code or runtime execution.",
+      },
+      {
+        num: "02",
+        title: "PRIMITIVE VERIFICATION",
+        description:
+          "Automated rule-based detection for obsolete ciphers, insecure key sizes, and broken pseudo-random number generators.",
+      },
+      {
+        num: "03",
+        title: "VULNERABILITY RADAR",
+        description:
+          "Interactive multi-dimensional radar mapping attack surface severity across protocol weaknesses and key management.",
+      },
+    ],
+    architecture: [
+      { tech: "JAVA & ASM BYTECODE", role: "Decompilation & Bytecode Tree Manipulation" },
+      { tech: "RUST", role: "High-Performance Primitive Verification Engine" },
+      { tech: "TYPESCRIPT & REACT", role: "Interactive Security Telemetry Dashboard" },
+      { tech: "NIST STANDARDS", role: "Cryptographic Rule Definition Baseline" },
+    ],
+    githubUrl: "https://github.com/aali2k7",
+    environmentalBg: "bg-[#0F131C]",
+  },
+  {
+    id: "synapse-os",
+    number: "03",
+    name: "SYNAPSE OS",
+    thesisLead: "ORCHESTRATION, UNBOUND.",
+    thesisSub: "AUTONOMOUS MULTI-AGENT WORKSPACE FOR TECHNICAL PROBLEM SOLVING.",
+    status: "RESEARCH & CONCEPT",
+    image: "/images/project-synapse.png",
+    problemTitle: "SINGLE-MODEL PROMPTS HIT COGNITIVE WALLS.",
+    problemDescription:
+      "Complex systems engineering cannot be solved in a single prompt context. Monolithic models lose coherence, hallucinate technical constraints, and fail to maintain multi-step state verification.",
+    responseTitle: "COLLABORATIVE TOPOLOGY OF AUTONOMOUS AGENTS.",
+    responseDescription:
+      "An experimental operating environment where specialized micro-agents—researchers, architects, coders, and auditors—collaborate through dynamic message topologies to solve complex technical tasks.",
+    trinityPillars: ["SPAWN", "COORDINATE", "EXECUTE"],
+    capabilities: [
+      {
+        num: "01",
+        title: "DYNAMIC AGENT TOPOLOGY",
+        description:
+          "Graph-based orchestration routing tasks between autonomous agents with isolated memory states.",
+      },
+      {
+        num: "02",
+        title: "REAL-TIME SYNTHESIS TERMINAL",
+        description:
+          "Streaming code compilation and tool execution pipelines with automated multi-agent cross-verification.",
+      },
+      {
+        num: "03",
+        title: "SYSTEM TELEMETRY",
+        description:
+          "Real-time resource budgeting, token allocation telemetry, and interactive dependency graph exploration.",
+      },
+    ],
+    architecture: [
+      { tech: "PYTHON", role: "Agent Runtime & Tool Execution Sandboxes" },
+      { tech: "WEBSOCKETS", role: "Low-Latency Telemetry & Agent Communication" },
+      { tech: "DOCKER", role: "Isolated Sandbox Environments" },
+      { tech: "NEXT.JS & TAILWIND", role: "Dynamic Canvas Graph Interface" },
+    ],
+    githubUrl: "https://github.com/aali2k7",
+    environmentalBg: "bg-[#0A0E17]",
+  },
+];
 
 export function ProjectsSection() {
-  const sectionRef = useRef<HTMLDivElement | null>(null);
-  const horizontalTrackRef = useRef<HTMLDivElement | null>(null);
-  const [scrollProgress, setScrollProgress] = useState(0);
-  const [maxTranslateX, setMaxTranslateX] = useState(0);
-
-  // Measure dynamic horizontal track translation distance
-  useEffect(() => {
-    const calculateWidth = () => {
-      if (!horizontalTrackRef.current) return;
-      const trackWidth = horizontalTrackRef.current.scrollWidth;
-      const viewportWidth = window.innerWidth;
-      // Calculate total translation needed to display the last project card comfortably
-      const totalDistance = Math.max(0, trackWidth - viewportWidth + (viewportWidth > 768 ? 140 : 40));
-      setMaxTranslateX(totalDistance);
-    };
-
-    calculateWidth();
-    window.addEventListener("resize", calculateWidth);
-    return () => window.removeEventListener("resize", calculateWidth);
-  }, []);
-
-  // Track scroll progress inside the section
-  useEffect(() => {
-    const handleScroll = () => {
-      const el = sectionRef.current;
-      if (!el) return;
-
-      const rect = el.getBoundingClientRect();
-      const windowHeight = window.innerHeight;
-      const totalScrollableDistance = rect.height - windowHeight;
-
-      if (totalScrollableDistance <= 0) return;
-
-      const currentScroll = -rect.top;
-      const rawProgress = currentScroll / totalScrollableDistance;
-      const progress = Math.max(0, Math.min(1, rawProgress));
-
-      setScrollProgress(progress);
-    };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    handleScroll();
-
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // ---------------------------------------------------------------------------
-  // HORIZONTAL CHOREOGRAPHY TIMELINE (0.0 -> 1.0)
-  // ---------------------------------------------------------------------------
-
-  // Phase 1: Projects Canvas Enters DIRECTLY from the FAR RIGHT (0.0 -> 0.16)
-  // Strictly horizontal (x: 100vw -> 0vw, y: 0)
-  const entranceProgress = Math.max(0, Math.min(1, scrollProgress / 0.16));
-  // Cubic ease-out for immediate horizontal glide
-  const easedEntrance = 1 - Math.pow(1 - entranceProgress, 3);
-  const canvasTranslateX = (1 - easedEntrance) * 100; // +100vw -> 0vw
-
-  // Phase 2: Horizontal Project Gallery Scrub (0.16 -> 0.94)
-  // Begins ONLY once canvas has fully arrived at 0vw
-  const galleryProgress = Math.max(0, Math.min(1, (scrollProgress - 0.16) / 0.78));
-  const currentTranslateX = galleryProgress * maxTranslateX;
-
-  // Active Project Indicator (1, 2, or 3)
-  const activeIndex = useMemo(() => {
-    if (galleryProgress < 0.35) return 0;
-    if (galleryProgress < 0.70) return 1;
-    return 2;
-  }, [galleryProgress]);
-
   return (
-    <section
-      id="projects"
-      ref={sectionRef}
-      className="relative w-full h-[400vh] bg-[var(--bg-primary)] select-none overflow-x-clip border-t border-[var(--border-subtle)]"
-    >
-      {/* Sticky Viewport Container */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between py-6 sm:py-8 md:py-10 px-4 sm:px-6 md:px-12 lg:px-16 max-w-[1600px] mx-auto">
-
-        {/* Subtle background atmosphere in Projects realm */}
-        <div className="absolute inset-0 pointer-events-none ambient-glow-purple opacity-30 z-0" />
-        <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-96 h-96 ambient-glow-neon opacity-20 pointer-events-none z-0" />
-
-        {/* ========================================================================= */}
-        {/* HORIZONTAL PROJECTS CANVAS (Enters strictly along horizontal axis)        */}
-        {/* ========================================================================= */}
-        <div
-          className="relative z-10 w-full h-full flex flex-col justify-between will-change-transform"
-          style={{
-            transform: `translate3d(${canvasTranslateX}vw, 0, 0)`,
-          }}
-        >
-          {/* Top Section Header & Status Tracker */}
-          <div className="w-full flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-[var(--border-subtle)]">
+    <section id="projects" className="relative w-full overflow-hidden">
+      {/* ========================================================================= */}
+      {/* SECTION OVERVIEW HEADER                                                   */}
+      {/* ========================================================================= */}
+      <div className="w-full py-20 sm:py-24 md:py-28 px-4 sm:px-6 md:px-12 lg:px-16 bg-[#0C111C] border-b border-white/[0.08]">
+        <div className="max-w-7xl mx-auto space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-white/[0.08]">
             <div className="flex items-center gap-3">
               <span className="font-mono text-xs md:text-sm text-[var(--accent)] font-bold">
                 02
               </span>
-              <span className="font-mono text-xs md:text-sm uppercase tracking-widest text-[var(--text-muted)] font-semibold">
+              <span className="font-mono text-xs md:text-sm uppercase tracking-widest text-[#8A8F98] font-semibold">
                 SELECTED WORK / FLAGSHIP SYSTEMS
               </span>
-              <span className="hidden sm:inline-block text-[var(--border-subtle)]">•</span>
-              <span className="hidden sm:inline-block font-mono text-xs text-[var(--text-muted)]">
-                AI &amp; SECURITY ARCHITECTURE
-              </span>
             </div>
 
-            <div className="flex items-center gap-3 font-mono text-xs text-[var(--text-muted)] tracking-wider">
-              <span className="text-[var(--text-primary)] font-bold">
-                PROJECT {String(activeIndex + 1).padStart(2, "0")} / {String(projects.length).padStart(2, "0")}
-              </span>
-              <span>•</span>
-              <div className="flex items-center gap-1.5 text-[var(--accent)] font-semibold">
-                <span>SCROLL HORIZONTALLY</span>
-                <ArrowRight className="w-3.5 h-3.5 animate-pulse" />
-              </div>
+            <div className="flex items-center gap-2 font-mono text-xs text-[#8A8F98]">
+              <Terminal className="w-3.5 h-3.5 text-[var(--accent)]" />
+              <span>3 CHAPTERS // PRODUCTION &amp; RESEARCH</span>
             </div>
           </div>
 
-          {/* Main Horizontal Showcase Track */}
-          <div className="my-auto w-full py-2">
-            <div
-              ref={horizontalTrackRef}
-              className="flex flex-nowrap items-center gap-8 md:gap-12 will-change-transform"
-              style={{
-                transform: `translate3d(-${currentTranslateX}px, 0, 0)`,
-                transition: "transform 0.04s ease-out",
-              }}
-            >
-              {projects.map((project, index) => (
-                <div
-                  key={project.id}
-                  className="shrink-0 w-[88vw] sm:w-[84vw] md:w-[80vw] lg:w-[76vw] max-w-[1180px]"
-                >
-                  <ProjectCard project={project} isFlagship={index === 0 || project.featured} />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Bottom Progress Tracker Bar */}
-          <div className="w-full flex items-center justify-between pt-4 border-t border-[var(--border-subtle)] font-mono text-[11px] text-[var(--text-muted)] uppercase tracking-widest">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-3 h-3 text-[var(--accent)]" />
-              <span>[ 02 — CINEMATIC GALLERY ]</span>
-            </div>
-
-            {/* Visual scrub bar */}
-            <div className="hidden sm:flex items-center gap-3">
-              <span>EXPLORATION PROGRESS</span>
-              <div className="w-40 h-1.5 bg-[var(--bg-secondary)] rounded-full overflow-hidden border border-[var(--border-subtle)]">
-                <div
-                  className="h-full bg-[var(--accent)] shadow-[0_0_10px_var(--accent)] transition-all duration-75"
-                  style={{ width: `${Math.round(galleryProgress * 100)}%` }}
-                />
-              </div>
-              <span className="text-[var(--text-primary)] font-semibold">
-                {Math.round(galleryProgress * 100)}%
+          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-8 pt-4">
+            <div className="space-y-2 max-w-2xl">
+              <span className="font-mono text-xs uppercase tracking-widest text-[var(--accent)] font-bold">
+                HIGH-IMPACT ARCHITECTURE
               </span>
+              <h2 className="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tight text-[#F1F2F0] leading-none">
+                ENGINEERED <span className="text-[var(--accent)]">SYSTEMS.</span>
+              </h2>
             </div>
 
-            <span className="text-[var(--text-secondary)]">
-              {galleryProgress >= 0.98 ? "COMPLETED ↓ SCROLL FOR BIOGRAPHY" : "CONTINUE SCROLLING"}
-            </span>
+            <p className="font-body text-sm sm:text-base text-[#A6A9AD] max-w-lg leading-relaxed">
+              Each system addresses high-stakes complexity through architectural discipline—spanning contextual intelligence, compiled bytecode security analysis, and multi-agent coordination.
+            </p>
           </div>
         </div>
+      </div>
 
+      {/* ========================================================================= */}
+      {/* SEQUENTIAL CINEMATIC CHAPTERS                                             */}
+      {/* ========================================================================= */}
+      <div className="w-full">
+        {projectChapters.map((project, idx) => (
+          <ProjectChapter
+            key={project.id}
+            project={project}
+            isLast={idx === projectChapters.length - 1}
+          />
+        ))}
+      </div>
+
+      {/* Section Footer Transition to Experience */}
+      <div className="w-full py-12 px-4 sm:px-6 md:px-12 lg:px-16 bg-[#0A0E17] border-t border-white/[0.08] flex items-center justify-between font-mono text-xs text-[#8A8F98] uppercase tracking-wider">
+        <div className="max-w-7xl mx-auto w-full flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-3.5 h-3.5 text-[var(--accent)]" />
+            <span>CHAPTER 02 CONCLUDED</span>
+          </div>
+          <span>SCROLL FOR CHRONOLOGY &amp; LEADERSHIP ↓</span>
+        </div>
       </div>
     </section>
   );
