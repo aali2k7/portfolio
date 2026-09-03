@@ -135,6 +135,67 @@ body {
   background: rgba(90, 255, 21, 0.4);
 }
 
+/* Continuous Infinite Marquee Animations */
+@keyframes marquee-left {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes marquee-right {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-marquee-left-slow {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: marquee-left 52s linear infinite;
+}
+
+.animate-marquee-left-medium {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: marquee-left 38s linear infinite;
+}
+
+.animate-marquee-right-slow {
+  display: flex;
+  width: max-content;
+  will-change: transform;
+  animation: marquee-right 46s linear infinite;
+}
+
+/* Signature Organic Floating Idle Keyframes */
+@keyframes signature-idle-float {
+  0%, 100% {
+    transform: translate3d(0, 0, 0) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translate3d(1.5px, -3.5px, 0) rotate(0.4deg) scale(1.004);
+  }
+  50% {
+    transform: translate3d(-1px, -5px, 0) rotate(-0.3deg) scale(1.008);
+  }
+  75% {
+    transform: translate3d(-2px, -2px, 0) rotate(-0.6deg) scale(1.003);
+  }
+}
+
+.animate-signature-idle {
+  animation: signature-idle-float 7.5s ease-in-out infinite;
+  will-change: transform;
+}
+
 /* Accessibility: prefers-reduced-motion overrides */
 @media (prefers-reduced-motion: reduce) {
   *,
