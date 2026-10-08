@@ -1,5 +1,6 @@
 import { SmoothScrollProvider } from "@/components/common/SmoothScrollProvider";
 import { Header } from "@/components/navigation/Header";
+import { FluidShaderCanvas } from "@/components/common/FluidShaderCanvas";
 import { HeroSection } from "@/components/hero/HeroSection";
 import { ProjectsSection } from "@/components/projects/ProjectsSection";
 import { ExperienceSection } from "@/components/experience/ExperienceSection";
@@ -12,6 +13,11 @@ export default function Home() {
   return (
     <SmoothScrollProvider>
       <div className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] selection:bg-[var(--accent)] selection:text-[var(--accent-contrast)]">
+        {/* Interactive WebGL Fluid Shader Canvas (Inspired by NMYT) */}
+        <div className="fixed inset-0 pointer-events-none z-0">
+          <FluidShaderCanvas />
+        </div>
+
         {/* Persistent Floating Minimalist Navigation */}
         <Header />
 

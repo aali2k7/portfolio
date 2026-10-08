@@ -77,19 +77,23 @@ export function Header() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => handleNavigate("contact")}
-              className="hidden sm:inline-flex items-center text-xs font-mono tracking-wider font-semibold px-4 py-2 rounded-full border border-[rgba(255,255,255,0.15)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all cursor-pointer text-[var(--text-primary)]"
+              className="roll-btn group hidden sm:inline-flex items-center text-xs font-mono tracking-wider font-semibold px-4 py-2 rounded-full border border-white/[0.15] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-all cursor-pointer text-[var(--text-primary)]"
             >
-              LET&apos;S TALK
+              <span className="roll-text">
+                <span data-text="LET'S TALK">LET&apos;S TALK</span>
+              </span>
             </button>
 
             <button
               onClick={() => setIsMenuOpen(true)}
-              className="flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[var(--accent)] text-[var(--accent-contrast)] hover:opacity-90 shadow-[0_0_12px_rgba(90,255,21,0.25)] transition-all duration-200 cursor-pointer text-xs font-mono tracking-widest uppercase font-bold"
+              className="roll-btn group flex items-center gap-2 px-3.5 py-1.5 sm:px-4 sm:py-2 rounded-full bg-[var(--accent)] text-[var(--accent-contrast)] hover:shadow-[0_0_20px_rgba(90,255,21,0.4)] transition-all duration-200 cursor-pointer text-xs font-mono tracking-widest uppercase font-bold"
               aria-expanded={isMenuOpen}
               aria-label="Open Navigation Menu"
             >
-              <span>MENU</span>
-              <Menu className="w-3.5 h-3.5" />
+              <span className="roll-text">
+                <span data-text="MENU">MENU</span>
+              </span>
+              <Menu className="w-3.5 h-3.5 transition-transform duration-300 group-hover:scale-110" />
             </button>
           </div>
         </div>

@@ -138,6 +138,69 @@ body {
   background: rgba(90, 255, 21, 0.4);
 }
 
+/* NMYT-Grade Rolling Text Hover Effect */
+.roll-btn {
+  display: inline-flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.roll-text {
+  display: inline-block;
+  position: relative;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.roll-text > span {
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+}
+
+.roll-btn:hover .roll-text > span,
+.roll-text:hover > span {
+  transform: translateY(-100%);
+}
+
+.roll-text > span::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 100%;
+  left: 0;
+  white-space: nowrap;
+  color: inherit;
+}
+
+/* Agency Studio Card Glassmorphism & Atmospheric Lighting */
+.studio-card {
+  position: relative;
+  background: linear-gradient(135deg, rgba(15, 13, 28, 0.75) 0%, rgba(7, 6, 11, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 30px 80px -20px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.studio-card:hover {
+  border-color: rgba(90, 255, 21, 0.3);
+  box-shadow: 0 40px 100px -20px rgba(90, 255, 21, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.hairline-divider {
+  position: relative;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.12) 20%, rgba(255, 255, 255, 0.12) 80%, transparent 100%);
+}
+
+.hairline-divider::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.25;
+}
+
 /* Continuous Infinite Marquee Animations */
 @keyframes marquee-left {
   0% {
