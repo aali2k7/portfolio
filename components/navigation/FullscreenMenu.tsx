@@ -10,16 +10,18 @@ interface FullscreenMenuProps {
   onClose: () => void;
   onNavigate: (sectionId: string) => void;
   activeSection: string;
+  isLightWorld?: boolean;
 }
 
 const navLinks = [
-  { number: "01", label: "HOME & PHILOSOPHY", targetId: "hero" },
-  { number: "02", label: "SELECTED WORK", targetId: "projects" },
-  { number: "03", label: "EXPERIENCE", targetId: "experience" },
-  { number: "04", label: "RESEARCH", targetId: "research" },
-  { number: "05", label: "TECH STACK", targetId: "stack" },
-  { number: "06", label: "BEYOND CODE", targetId: "personal" },
-  { number: "07", label: "CONTACT", targetId: "contact" },
+  { number: "01", label: "HOME & CLIMAX", targetId: "hero" },
+  { number: "02", label: "INTRODUCTION", targetId: "intro" },
+  { number: "03", label: "SELECTED WORK", targetId: "work" },
+  { number: "04", label: "EXPERIENCE", targetId: "experience" },
+  { number: "05", label: "RESEARCH", targetId: "research" },
+  { number: "06", label: "TECHNICAL TAXONOMY", targetId: "stack" },
+  { number: "07", label: "OUTSIDE THE SCREEN", targetId: "perspective" },
+  { number: "08", label: "CONTACT & INQUIRY", targetId: "contact" },
 ];
 
 export function FullscreenMenu({
@@ -27,6 +29,7 @@ export function FullscreenMenu({
   onClose,
   onNavigate,
   activeSection,
+  isLightWorld = false,
 }: FullscreenMenuProps) {
   // Lock body scroll and listen for Escape key
   useEffect(() => {
@@ -49,6 +52,14 @@ export function FullscreenMenu({
     };
   }, [isOpen, onClose]);
 
+  const bgClass = isLightWorld ? "bg-[#F4F1E9] text-[#111111]" : "bg-[#07060B] text-[#F5F5F7]";
+  const borderClass = isLightWorld ? "border-[#111111]/[0.08]" : "border-white/[0.1]";
+  const subtextClass = isLightWorld ? "text-[#6F6B64]" : "text-[#A0A0B0]";
+  const activeColor = isLightWorld ? "text-[#315C43]" : "text-[var(--accent)]";
+  const hoverColor = isLightWorld
+    ? "group-hover:text-[#315C43]"
+    : "group-hover:text-[var(--accent)]";
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -57,23 +68,29 @@ export function FullscreenMenu({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-0 z-50 flex flex-col justify-between bg-[#07060B] text-[#F5F5F7] p-6 md:p-12 lg:p-16"
+          className={`fixed inset-0 z-50 flex flex-col justify-between p-6 md:p-12 lg:p-16 ${bgClass}`}
           role="dialog"
           aria-modal="true"
           aria-label="Navigation Menu"
         >
           {/* Top Bar inside Menu */}
-          <div className="flex items-center justify-between border-b border-[rgba(255,255,255,0.1)] pb-6">
+          <div className={`flex items-center justify-between border-b ${borderClass} pb-6`}>
             <div className="flex items-center gap-3">
-              <span className="w-2.5 h-2.5 rounded-full bg-[var(--accent)] shadow-[0_0_10px_var(--accent)] animate-pulse" />
-              <span className="font-mono text-xs uppercase tracking-widest text-[#A0A0B0]">
+              <span
+                className={`w-2 h-2 rounded-full ${
+                  isLightWorld
+                    ? "bg-[#315C43]"
+                    : "bg-[var(--accent)] shadow-[0_0_8px_var(--accent)] animate-pulse"
+                }`}
+              />
+              <span className={`font-mono text-xs uppercase tracking-widest ${subtextClass}`}>
                 {siteConfig.name} — Directory
               </span>
             </div>
 
             <button
               onClick={onClose}
-              className="group flex items-center gap-2 px-4 py-2 rounded-full border border-[rgba(255,255,255,0.15)] hover:border-[var(--accent)] hover:text-[var(--accent)] transition-colors duration-200 text-sm font-mono tracking-wider cursor-pointer"
+              className={`group flex items-center gap-2 px-4 py-2 rounded-full border ${borderClass} hover:border-[#315C43] transition-colors duration-200 text-sm font-mono tracking-wider cursor-pointer`}
               aria-label="Close menu"
             >
               <span>CLOSE</span>
@@ -83,17 +100,17 @@ export function FullscreenMenu({
 
           {/* Nav List */}
           <nav className="my-auto py-8">
-            <ul className="flex flex-col gap-2 md:gap-4">
+            <ul className="flex flex-col gap-2 md:gap-3">
               {navLinks.map((link, idx) => {
                 const isActive = activeSection === link.targetId;
                 return (
                   <motion.li
                     key={link.targetId}
-                    initial={{ opacity: 0, y: 24 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{
-                      duration: 0.4,
-                      delay: 0.04 * idx,
+                      duration: 0.35,
+                      delay: 0.03 * idx,
                       ease: [0.16, 1, 0.3, 1],
                     }}
                   >
@@ -102,20 +119,29 @@ export function FullscreenMenu({
                         onNavigate(link.targetId);
                         onClose();
                       }}
-                      className="group flex items-baseline gap-4 md:gap-8 text-left w-full cursor-pointer py-1"
+                      className="group flex items-baseline gap-4 md:gap-8 text-left w-full cursor-pointer py-1.5 focus:outline-none"
                     >
-                      <span className="font-mono text-xs md:text-sm text-[#66667B] group-hover:text-[var(--accent)] transition-colors">
+                      <span
+                        className={`font-mono text-xs md:text-sm tabular-nums transition-colors ${
+                          isLightWorld ? "text-[#9A958B]" : "text-[#66667B]"
+                        } ${hoverColor}`}
+                      >
                         {link.number}
                       </span>
                       <span
-                        className={`font-display text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight transition-all duration-300 ${isActive
-                            ? "text-[var(--accent)] translate-x-3"
-                            : "text-[#E5E5EA] group-hover:text-[var(--accent)] group-hover:translate-x-3"
-                          }`}
+                        className={`font-heading text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-normal tracking-tight transition-all duration-300 ${
+                          isActive
+                            ? `${activeColor} translate-x-3 font-medium`
+                            : `${hoverColor} group-hover:translate-x-3`
+                        }`}
                       >
                         {link.label}
                       </span>
-                      <ArrowUpRight className="w-5 h-5 md:w-8 md:h-8 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[var(--accent)]" />
+                      <ArrowUpRight
+                        className={`w-4 h-4 md:w-6 md:h-6 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all ${
+                          isLightWorld ? "text-[#315C43]" : "text-[var(--accent)]"
+                        }`}
+                      />
                     </button>
                   </motion.li>
                 );
@@ -124,16 +150,21 @@ export function FullscreenMenu({
           </nav>
 
           {/* Bottom Meta & Socials */}
-          <div className="flex flex-col md:flex-row items-start md:items-center justify-between pt-6 border-t border-[rgba(255,255,255,0.1)] text-xs font-mono text-[#808095] gap-4">
+          <div
+            className={`flex flex-col md:flex-row items-start md:items-center justify-between pt-6 border-t ${borderClass} text-xs font-mono ${subtextClass} gap-4`}
+          >
             <div>
-              <span>BASED IN {siteConfig.location.city.toUpperCase()}, {siteConfig.location.country.toUpperCase()}</span>
+              <span>
+                BASED IN {siteConfig.location.city.toUpperCase()},{" "}
+                {siteConfig.location.country.toUpperCase()}
+              </span>
             </div>
             <div className="flex items-center gap-6">
               <a
                 href={siteConfig.socials.github}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-[var(--accent)] transition-colors"
+                className={isLightWorld ? "hover:text-[#111111]" : "hover:text-[var(--accent)]"}
               >
                 GITHUB
               </a>
@@ -141,17 +172,15 @@ export function FullscreenMenu({
                 href={siteConfig.socials.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-[var(--accent)] transition-colors"
+                className={isLightWorld ? "hover:text-[#111111]" : "hover:text-[var(--accent)]"}
               >
                 LINKEDIN
               </a>
               <a
-                href={siteConfig.socials.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hover:text-[var(--accent)] transition-colors"
+                href={`mailto:${siteConfig.email}`}
+                className={isLightWorld ? "hover:text-[#111111]" : "hover:text-[var(--accent)]"}
               >
-                INSTAGRAM
+                EMAIL
               </a>
             </div>
           </div>

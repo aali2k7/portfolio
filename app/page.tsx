@@ -1,48 +1,64 @@
 import { SmoothScrollProvider } from "@/components/common/SmoothScrollProvider";
 import { Header } from "@/components/navigation/Header";
-import { FluidShaderCanvas } from "@/components/common/FluidShaderCanvas";
 import { HeroSection } from "@/components/hero/HeroSection";
-import { ProjectsSection } from "@/components/projects/ProjectsSection";
-import { ExperienceSection } from "@/components/experience/ExperienceSection";
-import { ResearchSection } from "@/components/research/ResearchSection";
-import { TechStackSection } from "@/components/stack/TechStackSection";
-import { BeyondCodeSection } from "@/components/personal/BeyondCodeSection";
-import { ContactFooter } from "@/components/footer/ContactFooter";
+import { EditorialIntroSection } from "@/components/editorial/EditorialIntroSection";
+import { EditorialProjectsSection } from "@/components/editorial/EditorialProjectsSection";
+import { EditorialExperienceSection } from "@/components/editorial/EditorialExperienceSection";
+import { EditorialResearchSection } from "@/components/editorial/EditorialResearchSection";
+import { EditorialStackSection } from "@/components/editorial/EditorialStackSection";
+import { EditorialPerspectiveSection } from "@/components/editorial/EditorialPerspectiveSection";
+import { EditorialMilestonesSection } from "@/components/editorial/EditorialMilestonesSection";
+import { EditorialContactSection } from "@/components/editorial/EditorialContactSection";
 
 export default function Home() {
   return (
     <SmoothScrollProvider>
-      <div className="relative min-h-screen bg-[var(--bg-primary)] text-[var(--text-primary)] selection:bg-[var(--accent)] selection:text-[var(--accent-contrast)]">
-        {/* Interactive WebGL Fluid Shader Canvas (Inspired by NMYT) */}
-        <div className="fixed inset-0 pointer-events-none z-0">
-          <FluidShaderCanvas />
-        </div>
-
-        {/* Persistent Floating Minimalist Navigation */}
+      <div className="relative min-h-screen bg-[var(--bg-primary)]">
+        {/* Dynamic Navigation (World 01: Dark/Neon -> World 02: Warm Ivory/Editorial) */}
         <Header />
 
-        <main className="relative z-10 flex flex-col">
-          {/* Section 01: Hero Identity, Scroll-Driven Signature Draw, Receding Depth & Personal Details */}
+        <main className="relative flex flex-col">
+          {/* ========================================================================= */}
+          {/* WORLD 01: CINEMATIC DARK HERO & SCROLL-DRIVEN SIGNATURE CLIMAX            */}
+          {/* Builds to peak intensity -> Flashbang overexposure -> Settles in #F4F1E9  */}
+          {/* ========================================================================= */}
           <HeroSection />
 
-          {/* Section 02: Cinematic Horizontal Projects World (Enters directly from Right) */}
-          <ProjectsSection />
+          {/* ========================================================================= */}
+          {/* WORLD 02: WARM IVORY / MINIMAL / HUMAN / EDITORIAL / PREMIUM              */}
+          {/* ========================================================================= */}
+          <div
+            id="world-02"
+            className="relative z-20 bg-[#F4F1E9] text-[#111111] transition-colors duration-500 overflow-hidden"
+          >
+            {/* Subtle paper-like grain texture for World 02 editorial warmth */}
+            <div className="absolute inset-0 bg-grain opacity-20 mix-blend-multiply pointer-events-none" />
 
-          {/* Section 03: Experience & Leadership Chronology (AIRC, RiseInRise, Woxsen) */}
-          <ExperienceSection />
+            {/* Section 01: Human Editorial Introduction */}
+            <EditorialIntroSection />
 
-          {/* Section 04: Academic Research & INDJCST Java Security Publication */}
-          <ResearchSection />
+            {/* Section 02: Selected Work (Editorial Index + Deep Visual Showcase) */}
+            <EditorialProjectsSection />
 
-          {/* Section 05: Kinetic Typography Technical Capabilities Stack */}
-          <TechStackSection />
+            {/* Section 03: Experience & Leadership Timeline (AIRC, E-Cell, Council, Advisory) */}
+            <EditorialExperienceSection />
 
-          {/* Section 06: Beyond Code Human Explorations & Achievements */}
-          <BeyondCodeSection />
+            {/* Section 04: Academic Research & INDJCST Java Security Publication */}
+            <EditorialResearchSection />
+
+            {/* Section 05: Calm Technical Taxonomy */}
+            <EditorialStackSection />
+
+            {/* Section 06: Human Perspective — "Outside the screen" (Swimming, Coastlines, Music) */}
+            <EditorialPerspectiveSection />
+
+            {/* Section 07: Verified Milestones */}
+            <EditorialMilestonesSection />
+
+            {/* Section 08 & Footer: Contact, Colophon & Directory */}
+            <EditorialContactSection />
+          </div>
         </main>
-
-        {/* Section 07: Decisive High-Contrast Contact Footer & Social Directory */}
-        <ContactFooter />
       </div>
     </SmoothScrollProvider>
   );
